@@ -22,14 +22,17 @@ I have explored different references so far. Thus, I would say I have a complete
 ---
 
 ### Tasks
+
+ ####  you can do it 💪 👐
+* [ ] input to RD
+* [ ] RD to prefix
 * [ ] RD to DFA
+* [ ] get nullable
 * [ ] get firstpos
 * [ ] get lastpos
 * [ ] get followpos
 * [ ] build tree
 * [ ] Minimize DFA
-* [ ] input to RD
-
 * [ ] report
 
 ---
