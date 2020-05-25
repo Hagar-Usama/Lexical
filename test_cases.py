@@ -1,5 +1,6 @@
 import pytest
 from RegExp import RegExp
+from Node_AST import Node_AST
 
 ANSI_RESET = "\u001B[0m"
 ANSI_RED = "\u001B[31m"
@@ -137,7 +138,25 @@ def test_postfix():
     assert_it(correct_value, actual_value, case )
 
 
+def test_AST_tree():
+    case = 'test AST [case 1]'
+    # don't care for parentethis 
+    exp = "dd*.c(((𝛆|Ec)))#"
+    operators = {'(', ')', '*', '|','concat'}
+    post = ['d', 'd', '*', 'concat', '.', 'concat', 'c', 'concat', '𝛆', 'E', 'c', 'concat', '|', 'concat', '#', 'concat']
 
+    ast_node = Node_AST(post[0])
+    tree = ast_node.build_tree(post,operators)
+
+    actual_value = tree.left.right.left.name
+    correct_value = '𝛆'
+    assert_it(correct_value, actual_value, case )
+
+    case = 'test AST [case 2]'
+
+    actual_value = tree.left.right.right.right.name
+    correct_value = 'c'
+    assert_it(correct_value, actual_value, case )
    
 
 
@@ -162,6 +181,8 @@ def main():
         test_regex_input()
         print_blue('*.*.'*15)
         test_postfix()
+        print_blue('*.*.'*15)
+        test_AST_tree()
         
 
         
