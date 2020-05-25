@@ -27,8 +27,9 @@ I have explored different references so far. Thus, I would say I have a complete
 * [ ] input to RD
 * [x] add concat to RD (needs improvement)
 * [x] RD to prefix
-* [ ] node
-* [ ] build AST tree
+* [x] node
+* [x] build AST tree
+* [ ] show tree
 * [ ] RD to DFA
 * [ ] get nullable
 * [ ] get firstpos
