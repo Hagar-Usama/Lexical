@@ -1,6 +1,6 @@
 import pytest
 from RegExp import RegExp
-from Node_AST import Node_AST, build_AST_tree, print_tree, pre_followpos, get_node_dict
+from Node_AST import Node_AST, build_AST_tree, print_tree, pre_followpos, get_node_dict, eval_followpos
 
 ANSI_RESET = "\u001B[0m"
 ANSI_RED = "\u001B[31m"
@@ -204,20 +204,47 @@ def test_prefollow_tree():
     pre_followpos(tree)
     print_tree("", tree, False)
 
-    get_node_dict(tree)
-    print_blue(tree.left.id)
-    print_blue(tree.right.id)
 
-    print_yellow(tree.id_dict)
+    #get_node_dict(tree)
+    #print_yellow(tree.id_dict)
+    #print_purple(set(tree.id_dict.keys()))
+     
+    actual_value = tree.firstpos, tree.lastpos
+    correct_value = ({32},{46})
+    assert_it(correct_value, actual_value, case )
+
+
+def test_eval_follow():
+
+    case = 'Test eval follow [case 1]'
+    # don't care for parentethis 
+    exp = "dd*.c(((𝛆|Ec)))#"
+    # mind concat
+    operators = {'(', ')', '*', '|','concat'}
+    post = ['d', 'd', '*', 'concat', '.', 'concat', 'c', 'concat', '𝛆', 'E', 'c', 'concat', '|', 'concat', '#', 'concat']
+
+
+    tree = build_AST_tree(post,operators)
+    pre_followpos(tree)
+
+    get_node_dict(tree)
     print_purple(set(tree.id_dict.keys()))
 
-    print(tree.left.left.left.id_dict)
-    
 
+    #print_tree("", tree, False)
+
+    eval_followpos(tree, tree.id_dict)
+
+    print_tree("", tree, False)
     
-    actual_value = tree.left.right.left.name
-    correct_value = '𝛆'
+    
+    val1 = tree.left.left.left.left.left.followpos
+    val2 = tree.left.left.left.left.right.left.followpos
+     
+    actual_value = val1
+    correct_value = val2
     assert_it(correct_value, actual_value, case )
+
 
 
    
@@ -246,6 +273,8 @@ def main():
         test_show_tree()
         print_blue('*.*.'*15)
         test_prefollow_tree()
+        print_blue('*.*.'*15)
+        test_eval_follow()
         
 
         

@@ -29,12 +29,13 @@ I have explored different references so far. Thus, I would say I have a complete
 * [x] RD to prefix
 * [x] node
 * [x] build AST tree
-* [ ] show tree
+* [x] show tree
 * [ ] RD to DFA
-* [ ] get nullable
-* [ ] get firstpos
-* [ ] get lastpos
-* [ ] get followpos
+* [x] get nullable
+* [x] get firstpos
+* [x] get lastpos
+* [x] get followpos
+* [ ] add + and ? to Regex
 * [ ] Minimize DFA
 * [ ] report
 

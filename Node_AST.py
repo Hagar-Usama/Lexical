@@ -1,4 +1,18 @@
+import enum
+
 id = 0
+STAR = '*'
+CONCAT = 'concat'
+OR = '|'
+QSNMRK = '?'      
+PLUS = '+'
+
+class Operator(enum.Enum):
+    STAR = 1        # *
+    CONCAT = 2      # .
+    OR = 3          # |
+    QSNMRK = 4      # ?
+    PLUS = 5        # +
 
 class Node_AST:
     def __init__(self, name, parent=None):
@@ -36,7 +50,12 @@ class Node_AST:
             if self.parent.left == self:
                 return True
 
-    
+    def get_node_dict(self):
+        get_node_dict(self)
+
+    def pre_followpos(self):
+        pre_followpos(self)
+
     def show_tree(self):
 
             nodes_list = [self]
@@ -71,7 +90,7 @@ def print_tree(prefix, n, isLeft):
             if isLeft:
                 lefty = "|-- "
 
-            print( prefix+ lefty + "[" + n.name + "]  " + str(n.id) + " " + str(n.nullable) + "  " +  str(n.firstpos) + str(n.lastpos)  )
+            print( prefix+ lefty + "[" + n.name + "]  " + str(n.id) + " " + str(n.nullable) + "  " +  str(n.firstpos) + str(n.lastpos) + "**" +  str(n.followpos)  )
 
 
             lefty = "    "
@@ -147,8 +166,38 @@ def pre_followpos(cn):
                     s2 = cn.right.lastpos
                     cn.lastpos.update(s1.union(s2))
 
+def eval_followpos(cn, id_dict):
+
+    
+    if cn != None:
+        #eval code (post order)
+
+        eval_followpos(cn.left, id_dict)
+        eval_followpos(cn.right, id_dict)
+
+        if cn.name == CONCAT:
+            for i in cn.left.lastpos:
+                for j in cn.right.firstpos:
+                    print(f"i is : {i}, {id_dict[i].name}")
+                    print(f"j is : {j}, {id_dict[j].name}")
+                    id_dict[i].followpos.add(j)
+        
+        elif cn.name == STAR:
+            for i in cn.lastpos:
+                for j in cn.firstpos:
+                    print(f"i is : {i}, {id_dict[i].name}")
+                    print(f"j is : {j}, {id_dict[j].name}")
+                    id_dict[i].followpos.add(j)
+
+
+
+
+
+
 
 def get_node_dict(cn):
+
+    #current_node = cn
 
     if cn != None:
         if cn.isLeaf():
