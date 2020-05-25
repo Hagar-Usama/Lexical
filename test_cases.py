@@ -1,6 +1,6 @@
 import pytest
 from RegExp import RegExp
-from Node_AST import Node_AST, build_AST_tree, print_tree
+from Node_AST import Node_AST, build_AST_tree, print_tree, pre_followpos, get_node_dict
 
 ANSI_RESET = "\u001B[0m"
 ANSI_RED = "\u001B[31m"
@@ -191,6 +191,34 @@ def test_show_tree():
     assert_it(correct_value, actual_value, case )
 
 
+def test_prefollow_tree():
+    case = 'prefollow [case 1]'
+    # don't care for parentethis 
+    exp = "dd*.c(((𝛆|Ec)))#"
+    # mind concat
+    operators = {'(', ')', '*', '|','concat'}
+    post = ['d', 'd', '*', 'concat', '.', 'concat', 'c', 'concat', '𝛆', 'E', 'c', 'concat', '|', 'concat', '#', 'concat']
+
+
+    tree = build_AST_tree(post,operators)
+    pre_followpos(tree)
+    print_tree("", tree, False)
+
+    get_node_dict(tree)
+    print_blue(tree.left.id)
+    print_blue(tree.right.id)
+
+    print_yellow(tree.id_dict)
+    print_purple(set(tree.id_dict.keys()))
+
+    print(tree.left.left.left.id_dict)
+    
+
+    
+    actual_value = tree.left.right.left.name
+    correct_value = '𝛆'
+    assert_it(correct_value, actual_value, case )
+
 
    
 
@@ -216,6 +244,8 @@ def main():
         test_AST_tree()
         print_blue('*.*.'*15)
         test_show_tree()
+        print_blue('*.*.'*15)
+        test_prefollow_tree()
         
 
         

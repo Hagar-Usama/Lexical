@@ -1,15 +1,26 @@
+id = 0
+
 class Node_AST:
     def __init__(self, name, parent=None):
         self.name = name
+        global id
+        self.id = id
+        id += 1
         self.parent = parent
         self.left = None
         self.right = None
+        self.nullable = None
+        self.firstpos = set()
+        self.lastpos = set()
+        self.followpos = set()
+        self.leaves = []
+        self.id_dict = {}
 
     def isRoot(self):
         return self.parrent == None
     
     def isLeaf(self):
-        return (self.left) == None and (self.right == None)
+        return (self.left == None) and (self.right == None)
     
     def isRight(self):
         if self.isRoot():
@@ -25,11 +36,8 @@ class Node_AST:
             if self.parent.left == self:
                 return True
 
-
     
-
-    
-    def show_tree(self, option=0):
+    def show_tree(self):
 
             nodes_list = [self]
             current_node = self
@@ -54,34 +62,107 @@ class Node_AST:
                 for j in l:
                     nodes_list.append(j)
 
-                
+# @staticmethod               
 def print_tree(prefix, n, isLeft):
 
         if n != None:
-            print(prefix, end='')
-
-            if isLeft:
-                print("|-- ", end='')
-            else:
-                print("\\-- ", end= '')
             
-            print(n.name)
-
-            print(prefix, end='')
-
+            lefty = "\\-- "
             if isLeft:
-                print("|-- ", end='')
-            else:
-                print("\\-- ", end= '')
+                lefty = "|-- "
+
+            print( prefix+ lefty + "[" + n.name + "]  " + str(n.id) + " " + str(n.nullable) + "  " +  str(n.firstpos) + str(n.lastpos)  )
 
 
-            # recursively
             lefty = "    "
-            if isLeft: lefty = "|   ";
-            pre = prefix + lefty
+            if isLeft:
+                lefty = "|   "
 
-            print_tree(pre, n.left, True)
-            print_tree(pre, n.right, True)
+            print_tree(prefix + lefty, n.left, True)
+            print_tree(prefix + lefty, n.right, False)
+
+           
+def pre_followpos(cn):
+        """
+        gets nullable, firstpos and lastpos
+
+        """
+
+        #print("prefollow")
+
+        STAR = "*"
+        CONCAT = "concat"
+        OR = "|"
+        EPSILLON = '𝛆'
+
+        # basecase if node is null
+        if cn != None:
+
+            if cn.isLeaf():
+                # for leaves, epsillon or i
+                if cn.name == EPSILLON:
+                    cn.nullable = True
+                    # firstpos is phi
+                else:
+                    cn.nullable = False
+                    cn.firstpos.add(cn.id)
+                    cn.lastpos.add(cn.id)
+       
+
+            else:
+                # if concat , (|) ,and (*)
+                pre_followpos(cn.left)
+
+                if cn.name == STAR:
+                    cn.nullable = True
+                    cn.firstpos.update(cn.left.firstpos)
+                    cn.lastpos.update(cn.left.lastpos)
+
+                elif cn.name == CONCAT:
+                    pre_followpos(cn.right)
+                    cn.nullable = cn.left.nullable and cn.right.nullable
+
+                    s1 = cn.left.firstpos
+                    s2 = cn.right.firstpos
+
+                    s2 = s1.union(s2) if cn.left.nullable else s1
+                    cn.firstpos.update(s2)
+
+                    s1 = cn.left.lastpos
+                    s2 = cn.right.lastpos
+
+                    s2 = s1.union(s2) if cn.right.nullable else s2
+                    cn.lastpos.update(s2)
+                    
+
+                elif cn.name == OR:
+                    pre_followpos(cn.right)
+                    cn.nullable = cn.left.nullable or cn.right.nullable
+
+                    s1 = cn.left.firstpos
+                    s2 = cn.right.firstpos
+                    cn.firstpos.update(s1.union(s2))
+
+                    s1 = cn.left.lastpos
+                    s2 = cn.right.lastpos
+                    cn.lastpos.update(s1.union(s2))
+
+
+def get_node_dict(cn):
+
+    if cn != None:
+        if cn.isLeaf():
+            cn.id_dict[cn.id] = cn
+            #print(f"id: {cn.id}: name: {cn.name}")
+        else:
+            # internal node
+            get_node_dict(cn.left)
+            get_node_dict(cn.right)
+            
+            if cn.left:
+                cn.id_dict.update(cn.left.id_dict)
+            if cn.right:
+                cn.id_dict.update(cn.right.id_dict)
 
 
 def build_AST_tree(postfix_exp , op_list):
