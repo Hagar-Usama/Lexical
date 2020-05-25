@@ -1,6 +1,6 @@
 import pytest
 from RegExp import RegExp
-from Node_AST import Node_AST
+from Node_AST import Node_AST, build_AST_tree, print_tree
 
 ANSI_RESET = "\u001B[0m"
 ANSI_RED = "\u001B[31m"
@@ -145,8 +145,8 @@ def test_AST_tree():
     operators = {'(', ')', '*', '|','concat'}
     post = ['d', 'd', '*', 'concat', '.', 'concat', 'c', 'concat', '𝛆', 'E', 'c', 'concat', '|', 'concat', '#', 'concat']
 
-    ast_node = Node_AST(post[0])
-    tree = ast_node.build_tree(post,operators)
+    # ast_node = Node_AST(post[0])
+    tree = build_AST_tree(post,operators)
 
     actual_value = tree.left.right.left.name
     correct_value = '𝛆'
@@ -157,7 +157,38 @@ def test_AST_tree():
     actual_value = tree.left.right.right.right.name
     correct_value = 'c'
     assert_it(correct_value, actual_value, case )
+
+
+    case = 'test AST [case 3]'
+
+    actual_value = tree.right.name
+    correct_value = '#'
+    assert_it(correct_value, actual_value, case )
+
+
+    case = 'test AST [case 4]'
+
+    actual_value = tree.left.left.left.right.name
+    correct_value = '.'
+    assert_it(correct_value, actual_value, case )
    
+
+def test_show_tree():
+    case = 'Tree show [case 1]'
+    # don't care for parentethis 
+    exp = "dd*.c(((𝛆|Ec)))#"
+    # mind concat
+    operators = {'(', ')', '*', '|','concat'}
+    post = ['d', 'd', '*', 'concat', '.', 'concat', 'c', 'concat', '𝛆', 'E', 'c', 'concat', '|', 'concat', '#', 'concat']
+
+    tree = build_AST_tree(post,operators)
+    print_tree("", tree, False)
+    
+
+
+    actual_value = tree.left.right.left.name
+    correct_value = '𝛆'
+    assert_it(correct_value, actual_value, case )
 
 
 
@@ -183,6 +214,8 @@ def main():
         test_postfix()
         print_blue('*.*.'*15)
         test_AST_tree()
+        print_blue('*.*.'*15)
+        test_show_tree()
         
 
         
