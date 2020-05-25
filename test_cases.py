@@ -77,8 +77,8 @@ def test_postfix():
     correct_value =   ['a', 'b', 'c', 'concat', '|', '*', '#',  'concat'] 
     assert_it(correct_value, actual_value, case )
 
-    case = 'test postfix [case 1]'
-    exp = "a|bc*#"
+    case = 'test postfix [case 2]'
+    exp = "(a|b)c*#"
     exp = list(exp)
     operators = {'(', ')', '*', '|'}
     r = RegExp(exp, operators, star="*")
@@ -90,6 +90,55 @@ def test_postfix():
     actual_value =  r.get_postfix()
     correct_value =   ['a', 'b', '|', 'c', '*', 'concat', '#',  'concat'] 
     assert_it(correct_value, actual_value, case )
+
+    case = 'test postfix [case 3]'
+    exp = "dd*.(c|cEc)#"
+    exp = list(exp)
+    operators = {'(', ')', '*', '|'}
+    r = RegExp(exp, operators, star="*")
+    mod_list = r.handle_exp()
+
+    print(mod_list)
+
+    r.operators.add("concat")
+    actual_value =  r.get_postfix()
+    correct_value =  ['d', 'd', '*', 'concat', '.', 'concat', 'c', 'c', 'E', 'concat', 'c', 'concat', '|', 'concat', '#', 'concat']
+    assert_it(correct_value, actual_value, case )
+
+
+    case = 'test postfix [case 4]'
+    exp = "dd*.c(𝛆|Ec)#"
+    exp = list(exp)
+    operators = {'(', ')', '*', '|'}
+    r = RegExp(exp, operators, star="*")
+    mod_list = r.handle_exp()
+
+    print(mod_list)
+
+    r.operators.add("concat")
+    actual_value =  r.get_postfix()
+    correct_value =  ['d', 'd', '*', 'concat', '.', 'concat', 'c', 'concat', '𝛆', 'E', 'c', 'concat', '|', 'concat', '#', 'concat']
+    assert_it(correct_value, actual_value, case )
+
+
+    case = 'test postfix [case 5]'
+    # don't care for parentethis 
+    exp = "dd*.c(((𝛆|Ec)))#"
+    exp = list(exp)
+    operators = {'(', ')', '*', '|'}
+    r = RegExp(exp, operators, star="*")
+    mod_list = r.handle_exp()
+
+    print(mod_list)
+
+    r.operators.add("concat")
+    actual_value =  r.get_postfix()
+    correct_value = ['d', 'd', '*', 'concat', '.', 'concat', 'c', 'concat', '𝛆', 'E', 'c', 'concat', '|', 'concat', '#', 'concat']
+    assert_it(correct_value, actual_value, case )
+
+
+
+   
 
 
 

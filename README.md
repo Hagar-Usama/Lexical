@@ -25,13 +25,15 @@ I have explored different references so far. Thus, I would say I have a complete
 
  ####  you can do it 💪 👐
 * [ ] input to RD
-* [ ] RD to prefix
+* [x] add concat to RD (needs improvement)
+* [x] RD to prefix
+* [ ] node
+* [ ] build AST tree
 * [ ] RD to DFA
 * [ ] get nullable
 * [ ] get firstpos
 * [ ] get lastpos
 * [ ] get followpos
-* [ ] build tree
 * [ ] Minimize DFA
 * [ ] report
 

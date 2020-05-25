@@ -26,7 +26,7 @@ class RegExp:
                 x = exp[0]
                 y = exp[1]
 
-                #print(x,y)
+                print(x,y)
 
                 if y not in op:
                     if (x not in op) or (x == self.star) or (x == ")"):
@@ -37,10 +37,17 @@ class RegExp:
                         exp_list.append(exp.pop(0))
                         
                 else:
+                    # y is operand
                     if x == self.star:
                         exp_list.append(exp.pop(0))
                         exp_list.append("concat")
                         print("concat")
+                    
+                    elif (x not in op) and y == '(':
+                        exp_list.append(exp.pop(0))
+                        exp_list.append("concat")
+                        print("concat")
+
                     else:
                          exp_list.append(exp.pop(0))
         
