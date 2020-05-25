@@ -34,12 +34,65 @@ def test_regex_input():
     exp = "(a|bc)*#"
     exp = list(exp)
     r = RegExp(exp, operators, star="*")
-    r.handle_exp()
-    #print(r.exp_list)
+    
 
-    actual_value = r.exp_list
+    actual_value =  r.handle_exp()
     correct_value = ['(', 'a', '|', 'b', 'concat', 'c', ')', '*', 'concat', '#']
     assert_it(correct_value, actual_value, case )
+
+    case = 'test regex input [case 2]'
+    exp = "a*b*a|babc#"
+    exp = list(exp)
+    r = RegExp(exp, operators, star="*")
+    
+
+    actual_value =  r.handle_exp()
+    correct_value =  ['a', '*', 'concat', 'b', '*', 'concat', 'a', '|', 'b', 'concat', 'a', 'concat', 'b', 'concat', 'c', 'concat', '#'] 
+    assert_it(correct_value, actual_value, case )
+
+    case = 'test regex input [case 3]'
+    exp = "d*(c|(cEc))#"
+    exp = list(exp)
+    r = RegExp(exp, operators, star="*")
+   
+
+    actual_value =  r.handle_exp()
+    correct_value =   ['d', '*', 'concat', '(', 'c', '|', '(', 'c', 'concat', 'E', 'concat', 'c', ')', ')', 'concat', '#'] 
+    assert_it(correct_value, actual_value, case )
+
+
+def test_postfix():
+
+    case = 'test postfix [case 1]'
+    exp = "(a|bc)*#"
+    exp = list(exp)
+    operators = {'(', ')', '*', '|'}
+    r = RegExp(exp, operators, star="*")
+    mod_list = r.handle_exp()
+    
+    print(mod_list)
+
+    r.operators.add("concat")
+    actual_value =  r.get_postfix()
+    correct_value =   ['a', 'b', 'c', 'concat', '|', '*', '#',  'concat'] 
+    assert_it(correct_value, actual_value, case )
+
+    case = 'test postfix [case 1]'
+    exp = "a|bc*#"
+    exp = list(exp)
+    operators = {'(', ')', '*', '|'}
+    r = RegExp(exp, operators, star="*")
+    mod_list = r.handle_exp()
+
+    print(mod_list)
+
+    r.operators.add("concat")
+    actual_value =  r.get_postfix()
+    correct_value =   ['a', 'b', '|', 'c', '*', 'concat', '#',  'concat'] 
+    assert_it(correct_value, actual_value, case )
+
+
+
    
 
 def assert_it(correct_value, actual_value, case=""):
@@ -59,6 +112,7 @@ def main():
        
         test_regex_input()
         print_blue('*.*.'*15)
+        test_postfix()
         
 
         
