@@ -15,29 +15,34 @@ def build_DFA(DFA_dict, init_state):
     print("*.*"*12)
     while s:
 
-        
-        
+        print("%"*10)
+        print(s)
+        print("%"*10)
         state = s.pop(0)
         visited.append(state)
 
         ip_dict = dfa_aux(DFA_dict, state)
         # i = a , dict[i] = {90, 86}
         for i in ip_dict:
-            if i == '#':
-                pass
+            if i != '#':
+                g = set()
 
-            g = set()
+                # j = 90 
+                for j in ip_dict[i]:
+                    # get it follow and update the set
+                    g.update(DFA_dict[j][1])
+                print(i, g)
 
-            # j = 90 
-            for j in ip_dict[i]:
-                # get it follow and update the set
-                g.update(DFA_dict[j][1])
-            print(i, g)
-            #print("****")
-            
-            if g not in visited:
-                s.append(g)
+                if (g not in visited) and (g not in s):
+                    s.append(g)
+
+            else:
+                print("#")    
         print("*.*"*12)
+        
+                
+               
+            
 
             
 
