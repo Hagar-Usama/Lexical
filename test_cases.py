@@ -1,6 +1,7 @@
 import pytest
 from RegExp import RegExp
 from Node_AST import Node_AST, build_AST_tree, print_tree, pre_followpos, get_node_dict, eval_followpos
+from State import dfa_aux, build_DFA
 
 ANSI_RESET = "\u001B[0m"
 ANSI_RED = "\u001B[31m"
@@ -233,9 +234,11 @@ def test_eval_follow():
 
     #print_tree("", tree, False)
 
-    eval_followpos(tree, tree.id_dict)
+    eval_followpos(tree)
 
-    print_tree("", tree, False)
+    #print_yellow("🌲 tree 🌲")
+    #print_tree("", tree, False)
+    tree.print_tree()
     
     
     val1 = tree.left.left.left.left.left.followpos
@@ -244,6 +247,110 @@ def test_eval_follow():
     actual_value = val1
     correct_value = val2
     assert_it(correct_value, actual_value, case )
+
+    case = 'Test eval follow [case 2]'
+    # don't care for parentethis 
+    exp = "(a|b)*abb#"
+    exp = list(exp)
+    operators = {'(', ')', '*', '|'}
+
+    r = RegExp(exp, operators, star="*")
+    mod_list = r.handle_exp()
+
+    #print(mod_list)
+    
+
+    r.operators.add("concat")
+    operators = {'(', ')', '*', '|','concat'}
+    post = r.get_postfix()
+    #print(post)
+
+    tree = build_AST_tree(post,operators)
+    pre_followpos(tree)
+
+    get_node_dict(tree)
+
+    eval_followpos(tree)
+
+    tree.print_tree()
+    print(tree.id_dict)
+
+
+    actual_value = tree.left.left.left.left.left.right.followpos
+    correct_value = tree.left.left.left.left.left.right.followpos
+
+    assert_it(correct_value, actual_value, case )
+
+
+def test_trial():
+    case = 'Trial [case 1]'
+
+    exp = ["d","num",'(',"a", "|", "b", ")","#"]
+    operators = {'(', ')', '*', '|'}
+
+    r = RegExp(exp, operators, star="*")
+    mod_list = r.handle_exp()
+
+    print(mod_list)
+        
+    r.operators.add("concat")
+    operators = {'(', ')', '*', '|','concat'}
+    post = r.get_postfix()
+    print(post)
+
+    tree = build_AST_tree(post,operators)
+    pre_followpos(tree)
+    get_node_dict(tree)
+
+    eval_followpos(tree)
+    tree.print_tree()
+
+    
+    case = 'Trial [case 2]'
+
+    exp = ["d","(","a","|","b",")",'(',"a", "|", "b", ")","#"]
+    operators = {'(', ')', '*', '|'}
+
+    r = RegExp(exp, operators, star="*")
+    mod_list = r.handle_exp()
+
+    print(mod_list)
+        
+
+    r.operators.add("concat")
+    operators = {'(', ')', '*', '|','concat'}
+    post = r.get_postfix()
+    print(post)
+
+    tree = build_AST_tree(post,operators)
+    pre_followpos(tree)
+    get_node_dict(tree)
+
+    eval_followpos(tree)
+    tree.print_tree()
+
+    tree.get_DFA_dict()
+
+def test_DFA():
+
+
+    root_s = {85,90,86}
+    dfa_dict = {85: ('d', {86, 87}),
+     86: ('a', {90, 91}),
+     87: ('b', {90, 91}),
+     90: ('a', {94}),
+     91: ('b', {94}),
+     94: ('#', set())}
+
+    print(dfa_aux(dfa_dict, root_s))
+    build_DFA(dfa_dict, root_s)
+
+
+
+
+
+    
+
 
 
 
@@ -275,6 +382,10 @@ def main():
         test_prefollow_tree()
         print_blue('*.*.'*15)
         test_eval_follow()
+        print_blue('*.*.'*15)
+        test_trial()
+        print_blue('*.*.'*15)
+        test_DFA()
         
 
         

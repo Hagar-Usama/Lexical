@@ -12,7 +12,7 @@ class RegExp:
         self.post_list = []
 
 
-    def handle_exp(self):
+    def handle_exp_2(self):
 
         exp_list = []
        
@@ -55,7 +55,76 @@ class RegExp:
         self.cat_list = exp_list
         self.operators.add('concat')
         return exp_list
+
+    def handle_exp(self):
+
+        exp_list = []
+       
+        exp = self.exp_list
+        op = self.operators
+
+        STAR = '*'
+        CONCAT = 'concat'
+        OR = "|"
+        LBRKT = "("
+        RBRKT = ")"
                        
+        while len(exp) > 1:
+
+            if len(exp) > 1:
+                x = exp[0]
+                y = exp[1]
+
+                print(x,y)
+
+                if x == STAR:
+                    if (y == STAR) or (y == LBRKT):
+                        exp_list.append(exp.pop(0))
+                        exp_list.append("concat")
+                    elif y not in op:
+                        exp_list.append(exp.pop(0))
+                        exp_list.append("concat")
+                    else:
+                        exp_list.append(exp.pop(0))
+                
+                elif x == OR:
+                    if y == LBRKT:
+                        exp_list.append(exp.pop(0))
+                        #exp_list.append("concat")
+                    elif (y == STAR) or (y == OR) or (y == RBRKT):
+                        print("Error!")
+                    else:
+                        exp_list.append(exp.pop(0))
+
+                elif x == LBRKT:
+                    if (y == STAR) or (y == OR):
+                        print("Error!")
+                    else:
+                        exp_list.append(exp.pop(0))
+                
+                elif x == RBRKT:
+                    if (y == LBRKT) or (y not in op):
+                        exp_list.append(exp.pop(0))
+                        exp_list.append("concat")
+                    else:
+                        exp_list.append(exp.pop(0))
+
+                elif x not in op:
+                    if (y == LBRKT) or (y not in op):
+                        exp_list.append(exp.pop(0))
+                        exp_list.append("concat")
+                    else:
+                        exp_list.append(exp.pop(0))
+
+
+        
+        exp_list.append(exp.pop(0))
+        self.cat_list = exp_list
+        self.operators.add('concat')
+        return exp_list
+
+
+
 
     def get_postfix(self):
         """ 

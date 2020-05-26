@@ -50,11 +50,25 @@ class Node_AST:
             if self.parent.left == self:
                 return True
 
+    
+    def get_DFA_dict(self):
+        DFA_dict = {}
+
+        for i in self.id_dict:
+            DFA_dict[i] = (self.id_dict[i].name, self.id_dict[i].followpos)
+
+        print(DFA_dict)
+        return DFA_dict
+
     def get_node_dict(self):
         get_node_dict(self)
 
     def pre_followpos(self):
         pre_followpos(self)
+
+    def print_tree(self):
+        print("🌲 .. tree .. 🌲")
+        print_tree("", self, False)
 
     def show_tree(self):
 
@@ -87,8 +101,10 @@ def print_tree(prefix, n, isLeft):
         if n != None:
             
             lefty = "\\-- "
+            lefty = "└└──"
             if isLeft:
                 lefty = "|-- "
+                lefty = "└── "
 
             print( prefix+ lefty + "[" + n.name + "]  " + str(n.id) + " " + str(n.nullable) + "  " +  str(n.firstpos) + str(n.lastpos) + "**" +  str(n.followpos)  )
 
@@ -166,29 +182,30 @@ def pre_followpos(cn):
                     s2 = cn.right.lastpos
                     cn.lastpos.update(s1.union(s2))
 
-def eval_followpos(cn, id_dict):
+def eval_followpos(cn):
 
     
     if cn != None:
         #eval code (post order)
 
-        eval_followpos(cn.left, id_dict)
-        eval_followpos(cn.right, id_dict)
+        eval_followpos(cn.left)
+        eval_followpos(cn.right)
 
         if cn.name == CONCAT:
             for i in cn.left.lastpos:
+                
+                cn.id_dict[i].followpos.update(cn.right.firstpos)
+                """ 
                 for j in cn.right.firstpos:
                     print(f"i is : {i}, {id_dict[i].name}")
                     print(f"j is : {j}, {id_dict[j].name}")
                     id_dict[i].followpos.add(j)
-        
+                """
         elif cn.name == STAR:
             for i in cn.lastpos:
-                for j in cn.firstpos:
-                    print(f"i is : {i}, {id_dict[i].name}")
-                    print(f"j is : {j}, {id_dict[j].name}")
-                    id_dict[i].followpos.add(j)
-
+                cn.id_dict[i].followpos.update(cn.firstpos)
+                
+                   
 
 
 
