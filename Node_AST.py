@@ -17,9 +17,10 @@ class Operator(enum.Enum):
 class Node_AST:
     def __init__(self, name, parent=None):
         self.name = name
-        global id
-        self.id = id
-        id += 1
+        #global id
+        #self.id = id
+        #id += 1
+        self.id = 0
         self.parent = parent
         self.left = None
         self.right = None
@@ -53,7 +54,7 @@ class Node_AST:
     
     def get_DFA_dict(self):
         DFA_dict = {}
-        
+
         print(f"in DFA_dict: {self.id_dict}")
         for i in self.id_dict:
             print(f"{self.id_dict[i].name , self.id_dict[i].followpos}")
@@ -261,6 +262,7 @@ def build_AST_tree(postfix_exp , op_list):
 
         s = []
 
+        
        
         for current_node in node_list:
             #print(f"current_node {current_node} , name: {current_node.name}")
@@ -286,9 +288,15 @@ def build_AST_tree(postfix_exp , op_list):
             
             s.append(current_node)
 
-            """ 
-            for i in s:
-                print(i.name, end="  ")
-            print("")
-            """
+        for n in node_list:
+            if n.isLeaf() and n.name != '𝛆':
+                
+                global id
+                n.id = id + 1
+                id +=1
+            else:
+                n.id = 0
+
+
+            
         return s[0]

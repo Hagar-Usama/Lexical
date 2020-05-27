@@ -25,7 +25,7 @@ I have explored different references so far. Thus, I would say I have a complete
 
  ####  you can do it 💪 👐
 * [ ] input to RD
-* [x] add concat to RD (needs improvement)
+* [x] add concat to RD (needs improvement)[done]
 * [x] RD to prefix
 * [x] node
 * [x] build AST tree
@@ -36,9 +36,13 @@ I have explored different references so far. Thus, I would say I have a complete
 * [x] get followpos
 * [x] RD to DFA
 * [ ] Simulate DFA
-* [ ] make unique id for leaves only (expect for epsilon)
+* [x] make unique id for leaves only (expect for epsilon)
 * [ ] add + and ? to Regex
 * [ ] Minimize DFA
 * [ ] report
 
 ---
+
+### Notes:
+* rd to be entered without '#'
+* add '#' . directly to post-fix expression to avoid confusion

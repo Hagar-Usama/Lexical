@@ -12,29 +12,115 @@ class DFA:
         self.dfa_table = dfa_table
         self.accept_states = accept_states
         self.init_state = init_state
+        self.accepted_tokens = []
+        self.input_list = []
 
-    def simulate_dfa(self, input_list):
+    def simulate_dfa_2(self, input_list, prev_list):
+
+        """
+            simulates a correct input and divides it into tokens
+
+        """
+
+        if isinstance(input_list, str):
+            input_list = list(input_list)
+        
 
         DEAD_STATE  = 0
+        print_blue("enter simulation")
 
+        tokens = []
+        tokens_accept = []
+        
+        
+        s = self.init_state
+
+        if (input_list) and ( len(input_list) != len(prev_list)):
+            
+            prev_list = input_list.copy()
+        
+            while input_list:
+                tok = input_list.pop(0)
+                print_green(f"token is {tok}")
+
+                tokens.append(tok)
+
+                s = self.get_next_state(s, tok)
+
+                print_green(f"next state is: {s}")
+                
+                if s != DEAD_STATE:
+                    if self.is_accepted(s):
+                        tokens_accept.append(tokens.copy())
+                        print('accept')
+                
+                else:
+                    print("Dead state")
+                    tokens = []
+                    input_list.insert(0,tok)
+                    
+                    self.simulate_dfa_2(input_list, prev_list)
+                    
+                    break
+
+            if tokens_accept:
+                self.accepted_tokens.append(tokens_accept[-1])
+
+
+
+    def simulate_dfa(self, input_list):
+        
+        if isinstance(input_list , str):
+            input_list = list(input_list)
+
+        DEAD_STATE  = 0
+        print_blue("enter simulation")
+
+        tokens = []
+        tokens_accept = []
+        
         s = self.init_state
         for i in input_list:
+
+            print_green(f"i is {i}")
+            tokens.append(i)
+            print_green(tokens)
+
             s = self.get_next_state(s,i)
+            print_green(f"next state is: {s}")
             if s != DEAD_STATE:
                 if self.is_accepted(s):
-                    return 'accept'
-            
+                    tokens_accept.append(tokens.copy())
+                    #tokens = []
+                    print('accept')
+                    #return 'accept'
                
             else:
+                tokens = []
+                if tokens_accept:
+                    self.accepted_tokens.append(tokens_accept[-1])
+                tokens_accept = []
+
+
+
+
                 print("Dead state")
 
+        #print(tokens_accept)
+        """ 
+        if tokens_accept:
+            print_purple(tokens_accept)
+            return tokens_accept[-1]
+        else:
+            return []
+        """
             
     def is_accepted(self, state):
         return state in self.accept_states
 
     def get_next_state(self, current_state, input_token):
         #a_dict.get('missing_key', 'default value')
-        x = dfa_table.get(current_state,0)
+        x = self.dfa_table.get(current_state,0)
         if x:
             return x.get(input_token, 0)
         return x
@@ -70,7 +156,7 @@ def build_DFA(DFA_dict, init_state):
         ip_dict = dfa_aux(DFA_dict, state)
         print_purple(f"ip_dict is: {ip_dict}")
         for i in ip_dict:
-            if i != 'blah blah':
+            if i != '#':
                 to_state = set()
 
                 # set for each character
