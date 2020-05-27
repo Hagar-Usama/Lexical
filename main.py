@@ -91,35 +91,91 @@ def sort_file(input_list):
         if i.strip().startswith("{"):
             keywords.append(i.strip())
 
-            print("Keywords")
+            #print("Keywords")
         elif i.strip().startswith("["):
-            print("Punctuations")
+            #print("Punctuations")
             punctuations.append(i.strip())
         else:
             x = re.search(r"[a-zA-Z]+[0-9]*:", i.strip())
             if x:
                 RDs.append(i.strip())
-                print(f"RD {i.strip()}")
+                #print(f"RD {i.strip()}")
             else:
                 x = re.search(r"[a-zA-Z]+[0-9]* =", i.strip())
                 if x:
                     REs.append(i.strip())
-                    print(f"RE {i.strip()}")
+                    #print(f"RE {i.strip()}")
 
     return punctuations, keywords, RDs, REs
 
 def handle_lexical(input_list):
     p,k,rd,re = sort_file(input_list)
 
+    RDs = {}
+    REs = {}
+    pn = set()
+    kw = set()
+
+    for i in p:
+        pn.update(handle_punctuations(i))
+
+    for i in k:
+        kw.update(handle_keyword(i))
+
+    for i in rd:
+        r = handle_rd(i)
+        #print_blue(f"r= {r}")
+        RDs[r[0]] = r[1]
+        #print_purple(handle_rd(i))
+    for i in re:
+        r = handle_re(i)
+        #print_green(f"r= {r}")
+        REs[r[0]] = r[1]
+        #print_purple(handle_re(i))
+
+
+    for i in REs:
+        print_yellow(f"{i}={REs[i]}")
+
+    for i in RDs:
+        print_green(f"{i}:{RDs[i]}")
+
+    print_purple(pn)
+    print_blue(kw)
+
+ 
 
 def handle_keyword(input_list):
-    pass
+    
+    input_list = input_list.replace("{",'')
+    input_list = input_list.replace("}",'')
+    input_list = input_list.split(" ")
+    input_list = [i.strip() for i in input_list]
+
+    return set(input_list)
+
 def handle_punctuations(input_list):
-    pass
+    input_list = input_list.replace("[",'')
+    input_list = input_list.replace("]",'')
+    input_list = input_list.split(" ")
+    input_list = [i.strip() for i in input_list]
+
+    return set(input_list)
+
 def handle_rd(input_list):
-    pass
+    input_list = input_list.strip(" ")
+    input_list = input_list.split(":", 1)
+    input_list = [i.strip() for i in input_list]
+    
+    return input_list
+    
 def handle_re(input_list):
-    pass
+    input_list = input_list.strip(" ")
+    input_list = input_list.split("=", 1)
+    input_list = [i.strip() for i in input_list]
+
+    return input_list
+    
 
 def main():
     # get the directory of the lexical file
@@ -131,7 +187,22 @@ def main():
     line = file.read().replace("\n", "\n")
     file.close()
     line = line.strip()
+
     line = line.replace("\\L", '𝛆')
+    line = line.replace("\+", 'plusop')
+    line = line.replace("\*", 'mulop')
+
+    line = line.replace("+", 'PLUS')
+    line = line.replace("*", 'STAR')
+    line = line.replace("|", 'OR')
+
+    line = line.replace("plusop", '+')
+    line = line.replace("mulop", '*')
+
+
+
+
+
     line = line.replace("\\", '')
     lex_list = line.split('\n')
     
@@ -140,7 +211,8 @@ def main():
     
     #print(lex_list)
 
-    sort_file(lex_list)
+    #sort_file(lex_list)
+    handle_lexical(lex_list)
 
     # let is open it 
     #run_example()
