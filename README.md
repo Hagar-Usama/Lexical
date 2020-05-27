@@ -30,11 +30,13 @@ I have explored different references so far. Thus, I would say I have a complete
 * [x] node
 * [x] build AST tree
 * [x] show tree
-* [ ] RD to DFA
 * [x] get nullable
 * [x] get firstpos
 * [x] get lastpos
 * [x] get followpos
+* [x] RD to DFA
+* [ ] Simulate DFA
+* [ ] make unique id for leaves only (expect for epsilon)
 * [ ] add + and ? to Regex
 * [ ] Minimize DFA
 * [ ] report

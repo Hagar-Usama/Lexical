@@ -19,12 +19,14 @@ class RegExp:
         exp = self.exp_list
         op = self.operators
 
+        last = exp[-1]
                
         while len(exp) > 1:
 
             if len(exp) > 1:
                 x = exp[0]
                 y = exp[1]
+
 
                 print(x,y)
 

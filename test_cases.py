@@ -2,31 +2,8 @@ import pytest
 from RegExp import RegExp
 from Node_AST import Node_AST, build_AST_tree, print_tree, pre_followpos, get_node_dict, eval_followpos
 from State import dfa_aux, build_DFA
+from color_print import print_blue, print_green, print_purple, print_red, print_yellow, ANSI_RED, ANSI_RESET
 
-ANSI_RESET = "\u001B[0m"
-ANSI_RED = "\u001B[31m"
-ANSI_GREEN = "\u001B[32m"
-ANSI_YELLOW = "\u001B[33m"
-ANSI_BLUE = "\u001B[34m"
-ANSI_PURPLE = "\u001B[35m"
-#ANSI_YELLOW = "\u001B[36m"
-
-
-
-def print_yellow(msg):
-    print(f"{ANSI_YELLOW}{msg}{ANSI_RESET}")
-
-def print_purple(msg):
-    print(f"{ANSI_PURPLE}{msg}{ANSI_RESET}")
-
-def print_blue(msg):
-    print(f"{ANSI_BLUE}{msg}{ANSI_RESET}")
-
-def print_red(msg):
-    print(f"{ANSI_RED}{msg}{ANSI_RESET}")
-
-def print_green(msg):
-    print(f"{ANSI_GREEN}{msg}{ANSI_RESET}")
 
 def test_regex_input():
 
@@ -331,7 +308,61 @@ def test_trial():
 
     tree.get_DFA_dict()
 
+
+    case = 'Trial [case 3]'
+
+    # c|cEc
+
+    exp = ["c","|","c","E","c"]
+    operators = {'(', ')', '*', '|'}
+
+    r = RegExp(exp, operators, star="*")
+    mod_list = r.handle_exp()
+
+    print_red(mod_list)
+        
+
+    r.operators.add("concat")
+    operators = {'(', ')', '*', '|','concat'}
+    post = r.get_postfix()
+    post.append("#")
+    post.append("concat")
+    print(post)
+
+    tree = build_AST_tree(post,operators)
+    pre_followpos(tree)
+    get_node_dict(tree)
+
+    eval_followpos(tree)
+    tree.print_tree()
+
+    DFA_dict = tree.get_DFA_dict()
+    print_green(DFA_dict)
+
+    #DFA_dict = {96: ('c', set()), 97: ('c', {98}), 98: ('E', {100}), 100: ('c', {102}), 102: ('#', set())}
+    root_s = tree.firstpos
+    
+    dfa_table, accept_states = build_DFA(DFA_dict, root_s)
+    print_red(post)
+    print_blue(root_s)
+    print_green(dfa_table)
+    print_purple(accept_states)
+
+    actual_value = accept_states
+    correct_value = {frozenset({103}) ,frozenset({103,98})}
+    assert_it(correct_value, actual_value, case )
+
+
+
+
+   
+
+
+
 def test_DFA():
+
+    case = 'Build_DFA [case 1]'
+
 
 
     root_s = {85,90,86}
@@ -343,7 +374,14 @@ def test_DFA():
      94: ('#', set())}
 
     print(dfa_aux(dfa_dict, root_s))
-    build_DFA(dfa_dict, root_s)
+    dfa_table, accept_states = build_DFA(dfa_dict, root_s)
+    #print_green(dfa_table.get(frozenset({90,98}),-1).get('c',-1))
+
+    actual_value = accept_states
+    correct_value = {frozenset({90, 91, 94}), frozenset({94})}
+
+    assert_it(correct_value, actual_value, case )
+
 
 
 

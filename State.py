@@ -1,3 +1,5 @@
+import collections
+from color_print import print_blue, print_green, print_purple, print_red, print_yellow
 
 
 class State:
@@ -5,57 +7,114 @@ class State:
         self.visited = False
 
 
+class DFA:
+    def __init__(self, dfa_table, accept_states, init_state):
+        self.dfa_table = dfa_table
+        self.accept_states = accept_states
+        self.init_state = init_state
+
+    def simulate_dfa(self, input_list):
+
+        DEAD_STATE  = 0
+
+        s = self.init_state
+        for i in input_list:
+            s = self.get_next_state(s,i)
+            if s != DEAD_STATE:
+                if self.is_accepted(s):
+                    return 'accept'
+            
+               
+            else:
+                print("Dead state")
+
+            
+    def is_accepted(self, state):
+        return state in self.accept_states
+
+    def get_next_state(self, current_state, input_token):
+        #a_dict.get('missing_key', 'default value')
+        x = dfa_table.get(current_state,0)
+        if x:
+            return x.get(input_token, 0)
+        return x
+
+
 
 
 def build_DFA(DFA_dict, init_state):
-    visited = []
+    
 
-    s = [init_state]
+    print_yellow(DFA_dict)
+    visited = set()
+    #istate = frozenset(init_state)
+    istate = init_state
+    state_list = [istate]
+    accept_cond = get_accept_condition(DFA_dict)
+    accept_states = set()
+    trans = {}
+    dfa_table = collections.defaultdict(dict)
+
     
     print("*.*"*12)
-    while s:
+    while state_list:
 
-        print("%"*10)
-        print(s)
-        print("%"*10)
-        state = s.pop(0)
-        visited.append(state)
-
+        print(f"state_list: {state_list}")
+        print_green(f"visited: {visited}")        
+        state = state_list.pop(0)
+        state_trans = set()
+        
+        visited.add(frozenset(state))
+       
+        
         ip_dict = dfa_aux(DFA_dict, state)
-        # i = a , dict[i] = {90, 86}
+        print_purple(f"ip_dict is: {ip_dict}")
         for i in ip_dict:
-            if i != '#':
-                g = set()
+            if i != 'blah blah':
+                to_state = set()
 
-                # j = 90 
+                # set for each character
                 for j in ip_dict[i]:
-                    # get it follow and update the set
-                    g.update(DFA_dict[j][1])
-                print(i, g)
+                    # get its follow and update the set
+                    print_green(f"j is {j}")
+                    print_yellow(f"follow of j{DFA_dict[j][1]}")
+                    to_state.update(DFA_dict[j][1])
+                    #to_state.update({"*"})
 
-                if (g not in visited) and (g not in s):
-                    s.append(g)
+                # check if it is an accept state   
+                if accept_cond in to_state:
+                    print_red(f"it accept {to_state}")
+                    accept_states.add(frozenset(to_state))
+
+                    
+                print(f"DFA[{state}][{i}] = {to_state}")
+
+                dfa_table[frozenset(state)][i] = frozenset(to_state)
+
+
+                if to_state not in state_list:
+                    state_list.append(to_state)
 
             else:
-                print("#")    
+                print("#")
+
         print("*.*"*12)
-        
-                
-               
-            
 
-            
+    print(dfa_table)
 
+    for key in dfa_table:
+        print_yellow(f"key: {key} ---> value{dfa_table[key]}")
 
+    
+    return dfa_table, accept_states
+   
 
+     
+def get_accept_condition(DFA_dict):
 
-        # state is a set
-        # get element from
-        # get its character
-        # search for each equiv
-
-
-        pass
+    for i in DFA_dict:
+        if DFA_dict[i][0] == '#':
+            return i
 
 
 def dfa_aux(DFA_dict, state):
@@ -78,7 +137,8 @@ def dfa_aux(DFA_dict, state):
         else:
             d[DFA_dict[i][0]] = {i}
             
-    #print(d)
+    # convert set into frozenSet (no need)
+    d.update((k, frozenset(v)) for k, v in d.items())
     return d
 
 
