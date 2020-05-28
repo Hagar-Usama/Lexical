@@ -86,6 +86,7 @@ def sort_file(input_list):
     RDs = []
     REs = []
 
+    
     for i in input_list:
         
         if i.strip().startswith("{"):
@@ -106,10 +107,20 @@ def sort_file(input_list):
                     REs.append(i.strip())
                     #print(f"RE {i.strip()}")
 
-    return punctuations, keywords, RDs, REs
+    return punctuations, keywords, REs, RDs
 
 def handle_lexical(input_list):
-    p,k,rd,re = sort_file(input_list)
+
+    """
+    handles lexical inputs
+
+    returns Punctuation set
+           Keywords set
+           REs dict
+           RDs dict
+   
+    """
+    p,k,re,rd = sort_file(input_list)
 
     RDs = {}
     REs = {}
@@ -134,16 +145,102 @@ def handle_lexical(input_list):
         #print_purple(handle_re(i))
 
 
-    for i in REs:
-        print_yellow(f"{i}={REs[i]}")
+    #for i in REs:
+    #    print_yellow(f"{i}={REs[i]}")
 
-    for i in RDs:
-        print_green(f"{i}:{RDs[i]}")
+    #for i in RDs:
+    #    print_green(f"{i}:{RDs[i]}")
 
     print_purple(pn)
     print_blue(kw)
 
- 
+    return pn, kw, REs, RDs
+
+
+def handle_range(rules):
+
+
+    for i in rules:
+        #print(i)
+        x = re.search(r"([a-zA-Z]+[0-9])+-([a-zA-Z]+[0-9])+", i)
+
+        if x:
+            x = x.split('-')
+            print_red(f"range: {x[0]} - {x[1]}")
+
+        if i == "a-z":
+
+            range_s = 'a'
+            range_e = 'z'
+            y = range_s
+
+            for j in range(ord(range_s)+1, ord(range_e)):
+                y += " OR " + chr(j)
+
+            print(y)
+
+def generate_equivalent_range(str_input):
+
+    "generate ranges in ReExp"
+
+    if str_input == "a-z":
+        
+        range_s = 'a'
+        range_e = 'z'
+        y = range_s
+
+        for j in range(ord(range_s)+1, ord(range_e)+1):
+            y += " OR " + chr(j) 
+            
+    elif str_input == "A-Z":
+        
+        range_s = 'A'
+        range_e = 'Z'
+        y = range_s
+
+        for j in range(ord(range_s)+1, ord(range_e)+1):
+            y += " OR " + chr(j) 
+
+    elif str_input == "0-9":
+
+        range_s = '0'
+        range_e = '9'
+        y = range_s
+
+        for j in range(ord(range_s)+1, ord(range_e)+1):
+            y += " OR " + chr(j) 
+
+    return y
+
+
+
+    
+def list_rules(RE, RD):
+
+    """
+    make REs & RDs as lists
+
+    ex:
+    L = x | l --> ['x','|', 'l']
+
+    return modified RE and RD
+    
+    """
+
+    for key, value in RE.items():
+        RE[key] = value.split(" ")
+
+    for key, value in RD.items():
+        RD[key] = value.split(" ")
+
+    #for i in RE:
+    #    print_yellow(f"{i}={RE[i]}")
+
+    #for i in RD:
+    #    print_green(f"{i}:{RD[i]}")
+    
+    return RE, RD
+
 
 def handle_keyword(input_list):
     
@@ -165,6 +262,7 @@ def handle_punctuations(input_list):
 def handle_rd(input_list):
     input_list = input_list.strip(" ")
     input_list = input_list.split(":", 1)
+
     input_list = [i.strip() for i in input_list]
     
     return input_list
@@ -183,11 +281,14 @@ def main():
     output_file = 'lexical.txt'
     input_path = lx + '/' +  output_file
 
+
+    # read lexical file as a whole
     file = open(input_path)
     line = file.read().replace("\n", "\n")
     file.close()
     line = line.strip()
 
+    # handle file
     line = line.replace("\\L", '𝛆')
     line = line.replace("\+", 'plusop')
     line = line.replace("\*", 'mulop')
@@ -199,23 +300,30 @@ def main():
     line = line.replace("plusop", '+')
     line = line.replace("mulop", '*')
 
-
-
-
-
     line = line.replace("\\", '')
+    #print_yellow(line)
+
+    
+    line = line.replace('a-z',"( " + generate_equivalent_range("a-z") + " )")
+    line = line.replace('A-Z',"( " + generate_equivalent_range("A-Z") + " )")
+    line = line.replace('0-9',"( " + generate_equivalent_range("0-9") + " )")
     lex_list = line.split('\n')
     
     
-    print(line.strip())
+    # split lexical as punctuations, keywords, REs and RD
+    _,_,RE,RD = handle_lexical(lex_list)
+
+    # continue hanlding RE and RD to fully list
+    RE, RD = list_rules(RE,RD)
+
+    print(RE)
     
-    #print(lex_list)
+    for key, value in RE.items():
+        print_yellow(f"{key}==>{value}")
 
-    #sort_file(lex_list)
-    handle_lexical(lex_list)
+    for key, value in RD.items():
+        print_green(f"{key}==>{value}")
 
-    # let is open it 
-    #run_example()
    
 
 
