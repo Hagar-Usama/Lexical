@@ -280,6 +280,7 @@ def main():
     lx = get_current_directory()
     output_file = 'lexical.txt'
     input_path = lx + '/' +  output_file
+    print_purple(input_path)
 
 
     # read lexical file as a whole
