@@ -24,7 +24,7 @@ I have explored different references so far. Thus, I would say I have a complete
 ### Tasks
 
  ####  you can do it 💪 👐
-* [ ] input to RD
+* [x] input to RD
 * [x] add concat to RD (needs improvement)[done]
 * [x] RD to prefix
 * [x] node
@@ -35,10 +35,14 @@ I have explored different references so far. Thus, I would say I have a complete
 * [x] get lastpos
 * [x] get followpos
 * [x] RD to DFA
-* [ ] Simulate DFA
+* [x] Simulate DFA
 * [x] make unique id for leaves only (expect for epsilon)
-* [ ] add + and ? to Regex
+* [x] add + and ? to Regex
 * [ ] Minimize DFA
+* [ ] add RE nodes to RD tree
+* [ ] append keywords and punctuation
+* [ ] format input code
+
 * [ ] report
 
 ---
