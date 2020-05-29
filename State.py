@@ -19,6 +19,7 @@ class DFA:
 
         """
             simulates a correct input and divides it into tokens
+            it is recursive, stops when erroneous input
 
         """
 

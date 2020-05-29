@@ -1,11 +1,11 @@
 import enum
 
 id = 0
-STAR = '*'
-CONCAT = 'concat'
-OR = '|'
-QSNMRK = '?'      
-PLUS = '+'
+STAR = 'STAR'
+CONCAT = 'CONCAT'
+OR = 'OR'
+QSNMRK = 'QSNMRK'      
+PLUS = 'PLUS'
 
 class Operator(enum.Enum):
     STAR = 1        # *
@@ -130,9 +130,11 @@ def pre_followpos(cn):
 
         #print("prefollow")
 
-        STAR = "*"
-        CONCAT = "concat"
-        OR = "|"
+        STAR = "STAR"
+        CONCAT = "CONCAT"
+        OR = "OR"
+        QSNMRK = "QSTMRK"
+        PLUS = "PLUS"
         EPSILLON = '𝛆'
 
         # basecase if node is null
@@ -187,6 +189,17 @@ def pre_followpos(cn):
                     s2 = cn.right.lastpos
                     cn.lastpos.update(s1.union(s2))
 
+                elif cn.name == QSNMRK:
+                    cn.nullable = True
+                    cn.firstpos.update(cn.left.firstpos)
+                    cn.lastpos.update(cn.left.lastpos)
+
+                elif cn.name == PLUS:
+                    cn.nullable = cn.left.nullable
+                    cn.firstpos.update(cn.left.firstpos)
+                    cn.lastpos.update(cn.left.lastpos)
+          
+
 def eval_followpos(cn):
 
     
@@ -200,21 +213,11 @@ def eval_followpos(cn):
             for i in cn.left.lastpos:
                 
                 cn.id_dict[i].followpos.update(cn.right.firstpos)
-                """ 
-                for j in cn.right.firstpos:
-                    print(f"i is : {i}, {id_dict[i].name}")
-                    print(f"j is : {j}, {id_dict[j].name}")
-                    id_dict[i].followpos.add(j)
-                """
+               
         elif cn.name == STAR:
             for i in cn.lastpos:
                 cn.id_dict[i].followpos.update(cn.firstpos)
                 
-                   
-
-
-
-
 
 
 def get_node_dict(cn):
@@ -244,12 +247,17 @@ def build_AST_tree(postfix_exp , op_list):
 
         """
 
+        STAR = 'STAR'
+        CONCAT = 'CONCAT'
+        OR = 'OR'
+        QSNMRK = 'QSNMRK'      
+        PLUS = 'PLUS'
+
         if "(" in op_list:
             op_list.remove("(")
         if ")" in op_list:
             op_list.remove(")")
 
-        STAR = '*'
 
         node_list = []
 
@@ -270,10 +278,11 @@ def build_AST_tree(postfix_exp , op_list):
             #print(f"Node Name: {current_node.name}")
 
             if current_node.name in op_list:
-                if current_node.name == STAR:
+                if (current_node.name == STAR) or (current_node.name == PLUS) or (current_node.name == QSNMRK):
                     n = s.pop(-1)
                     current_node.left = n
                     n.parent = current_node
+            
                 else:
                     # concat , |
 

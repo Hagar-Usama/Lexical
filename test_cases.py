@@ -16,7 +16,7 @@ def test_regex_input():
     
 
     actual_value =  r.handle_exp()
-    correct_value = ['(', 'a', '|', 'b', 'concat', 'c', ')', '*', 'concat', '#']
+    correct_value = ['(', 'a', '|', 'b', 'CONCAT', 'c', ')', '*', 'CONCAT', '#']
     assert_it(correct_value, actual_value, case )
 
     case = 'test regex input [case 2]'
@@ -26,7 +26,7 @@ def test_regex_input():
     
 
     actual_value =  r.handle_exp()
-    correct_value =  ['a', '*', 'concat', 'b', '*', 'concat', 'a', '|', 'b', 'concat', 'a', 'concat', 'b', 'concat', 'c', 'concat', '#'] 
+    correct_value =  ['a', '*', 'CONCAT', 'b', '*', 'CONCAT', 'a', '|', 'b', 'CONCAT', 'a', 'CONCAT', 'b', 'CONCAT', 'c', 'CONCAT', '#'] 
     assert_it(correct_value, actual_value, case )
 
     case = 'test regex input [case 3]'
@@ -36,7 +36,7 @@ def test_regex_input():
    
 
     actual_value =  r.handle_exp()
-    correct_value =   ['d', '*', 'concat', '(', 'c', '|', '(', 'c', 'concat', 'E', 'concat', 'c', ')', ')', 'concat', '#'] 
+    correct_value =   ['d', '*', 'CONCAT', '(', 'c', '|', '(', 'c', 'CONCAT', 'E', 'CONCAT', 'c', ')', ')', 'CONCAT', '#'] 
     assert_it(correct_value, actual_value, case )
 
 
@@ -51,9 +51,9 @@ def test_postfix():
     
     print(mod_list)
 
-    r.operators.add("concat")
+    r.operators.add("CONCAT")
     actual_value =  r.get_postfix()
-    correct_value =   ['a', 'b', 'c', 'concat', '|', '*', '#',  'concat'] 
+    correct_value =   ['a', 'b', 'c', 'CONCAT', '|', '*', '#',  'CONCAT'] 
     assert_it(correct_value, actual_value, case )
 
     case = 'test postfix [case 2]'
@@ -65,9 +65,9 @@ def test_postfix():
 
     print(mod_list)
 
-    r.operators.add("concat")
+    r.operators.add("CONCAT")
     actual_value =  r.get_postfix()
-    correct_value =   ['a', 'b', '|', 'c', '*', 'concat', '#',  'concat'] 
+    correct_value =   ['a', 'b', '|', 'c', '*', 'CONCAT', '#',  'CONCAT'] 
     assert_it(correct_value, actual_value, case )
 
     case = 'test postfix [case 3]'
@@ -79,9 +79,9 @@ def test_postfix():
 
     print(mod_list)
 
-    r.operators.add("concat")
+    r.operators.add("CONCAT")
     actual_value =  r.get_postfix()
-    correct_value =  ['d', 'd', '*', 'concat', '.', 'concat', 'c', 'c', 'E', 'concat', 'c', 'concat', '|', 'concat', '#', 'concat']
+    correct_value =  ['d', 'd', '*', 'CONCAT', '.', 'CONCAT', 'c', 'c', 'E', 'CONCAT', 'c', 'CONCAT', '|', 'CONCAT', '#', 'CONCAT']
     assert_it(correct_value, actual_value, case )
 
 
@@ -94,9 +94,9 @@ def test_postfix():
 
     print(mod_list)
 
-    r.operators.add("concat")
+    r.operators.add("CONCAT")
     actual_value =  r.get_postfix()
-    correct_value =  ['d', 'd', '*', 'concat', '.', 'concat', 'c', 'concat', '𝛆', 'E', 'c', 'concat', '|', 'concat', '#', 'concat']
+    correct_value =  ['d', 'd', '*', 'CONCAT', '.', 'CONCAT', 'c', 'CONCAT', '𝛆', 'E', 'c', 'CONCAT', '|', 'CONCAT', '#', 'CONCAT']
     assert_it(correct_value, actual_value, case )
 
 
@@ -110,9 +110,9 @@ def test_postfix():
 
     print(mod_list)
 
-    r.operators.add("concat")
+    r.operators.add("CONCAT")
     actual_value =  r.get_postfix()
-    correct_value = ['d', 'd', '*', 'concat', '.', 'concat', 'c', 'concat', '𝛆', 'E', 'c', 'concat', '|', 'concat', '#', 'concat']
+    correct_value = ['d', 'd', '*', 'CONCAT', '.', 'CONCAT', 'c', 'CONCAT', '𝛆', 'E', 'c', 'CONCAT', '|', 'CONCAT', '#', 'CONCAT']
     assert_it(correct_value, actual_value, case )
 
 
@@ -120,8 +120,8 @@ def test_AST_tree():
     case = 'test AST [case 1]'
     # don't care for parentethis 
     exp = "dd*.c(((𝛆|Ec)))#"
-    operators = {'(', ')', '*', '|','concat'}
-    post = ['d', 'd', '*', 'concat', '.', 'concat', 'c', 'concat', '𝛆', 'E', 'c', 'concat', '|', 'concat', '#', 'concat']
+    operators = {'(', ')', '*', '|','CONCAT'}
+    post = ['d', 'd', '*', 'CONCAT', '.', 'CONCAT', 'c', 'CONCAT', '𝛆', 'E', 'c', 'CONCAT', '|', 'CONCAT', '#', 'CONCAT']
 
     # ast_node = Node_AST(post[0])
     tree = build_AST_tree(post,operators)
@@ -155,9 +155,9 @@ def test_show_tree():
     case = 'Tree show [case 1]'
     # don't care for parentethis 
     exp = "dd*.c(((𝛆|Ec)))#"
-    # mind concat
-    operators = {'(', ')', '*', '|','concat'}
-    post = ['d', 'd', '*', 'concat', '.', 'concat', 'c', 'concat', '𝛆', 'E', 'c', 'concat', '|', 'concat', '#', 'concat']
+    # mind CONCAT
+    operators = {'(', ')', '*', '|','CONCAT'}
+    post = ['d', 'd', '*', 'CONCAT', '.', 'CONCAT', 'c', 'CONCAT', '𝛆', 'E', 'c', 'CONCAT', '|', 'CONCAT', '#', 'CONCAT']
 
     tree = build_AST_tree(post,operators)
     print_tree("", tree, False)
@@ -173,9 +173,9 @@ def test_prefollow_tree():
     case = 'prefollow [case 1]'
     # don't care for parentethis 
     exp = "dd*.c(((𝛆|Ec)))#"
-    # mind concat
-    operators = {'(', ')', '*', '|','concat'}
-    post = ['d', 'd', '*', 'concat', '.', 'concat', 'c', 'concat', '𝛆', 'E', 'c', 'concat', '|', 'concat', '#', 'concat']
+    # mind CONCAT
+    operators = {'(', ')', '*', '|','CONCAT'}
+    post = ['d', 'd', '*', 'CONCAT', '.', 'CONCAT', 'c', 'CONCAT', '𝛆', 'E', 'c', 'CONCAT', '|', 'CONCAT', '#', 'CONCAT']
 
 
     tree = build_AST_tree(post,operators)
@@ -194,9 +194,9 @@ def test_eval_follow():
     case = 'Test eval follow [case 1]'
     # don't care for parentethis 
     exp = "dd*.c(((𝛆|Ec)))#"
-    # mind concat
-    operators = {'(', ')', '*', '|','concat'}
-    post = ['d', 'd', '*', 'concat', '.', 'concat', 'c', 'concat', '𝛆', 'E', 'c', 'concat', '|', 'concat', '#', 'concat']
+    # mind CONCAT
+    operators = {'(', ')', '*', '|','CONCAT'}
+    post = ['d', 'd', '*', 'CONCAT', '.', 'CONCAT', 'c', 'CONCAT', '𝛆', 'E', 'c', 'CONCAT', '|', 'CONCAT', '#', 'CONCAT']
 
 
     tree = build_AST_tree(post,operators)
@@ -234,8 +234,8 @@ def test_eval_follow():
     #print(mod_list)
     
 
-    r.operators.add("concat")
-    operators = {'(', ')', '*', '|','concat'}
+    r.operators.add("CONCAT")
+    operators = {'(', ')', '*', '|','CONCAT'}
     post = r.get_postfix()
     #print(post)
 
@@ -267,8 +267,8 @@ def test_trial():
 
     print(mod_list)
         
-    r.operators.add("concat")
-    operators = {'(', ')', '*', '|','concat'}
+    r.operators.add("CONCAT")
+    operators = {'(', ')', '*', '|','CONCAT'}
     post = r.get_postfix()
     print(post)
 
@@ -291,8 +291,8 @@ def test_trial():
     print(mod_list)
         
 
-    r.operators.add("concat")
-    operators = {'(', ')', '*', '|','concat'}
+    r.operators.add("CONCAT")
+    operators = {'(', ')', '*', '|','CONCAT'}
     post = r.get_postfix()
     print(post)
 
@@ -319,11 +319,11 @@ def test_trial():
     print_red(mod_list)
         
 
-    r.operators.add("concat")
-    operators = {'(', ')', '*', '|','concat'}
+    r.operators.add("CONCAT")
+    operators = {'(', ')', '*', '|','CONCAT'}
     post = r.get_postfix()
     post.append("#")
-    post.append("concat")
+    post.append("CONCAT")
     print(post)
 
     tree = build_AST_tree(post,operators)

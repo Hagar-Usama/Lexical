@@ -71,6 +71,8 @@ def run_example():
     # now simulate your input with the DFA
     input_list = "begin;endread\else"
 
+    
+
     machine.simulate_dfa_2(input_list,[])
     # get the accepted tokens to compare it later with each pattern
     accepted_tokens = machine.accepted_tokens

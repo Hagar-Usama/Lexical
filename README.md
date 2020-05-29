@@ -46,3 +46,4 @@ I have explored different references so far. Thus, I would say I have a complete
 ### Notes:
 * rd to be entered without '#'
 * add '#' . directly to post-fix expression to avoid confusion
+* dfa_simulate_2 is recursive it returns output in reverse order

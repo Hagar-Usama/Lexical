@@ -11,6 +11,7 @@ class Scanner:
         self.RD = dict()
         self.buffer = ""
         self.input_list = []
+        
 
     
     def analaze_lex(self):
@@ -39,6 +40,12 @@ class Scanner:
         self.buffer = self.buffer.replace('0-9',"( " + generate_equivalent_range("0-9") + " )")
 
         self.input_list = self.buffer.split('\n')
+
+    def get_RD_list(self):
+        return get_value_list(self.RD)
+        
+    def get_RE_list(self):
+        return get_value_list(self.RE)
     
     
     def handle_lexical(self):
@@ -233,6 +240,43 @@ def list_rules(RE, RD):
     
     return RE, RD
 
+def intersperse(lst, item):
+    result = [item] * (len(lst) * 2 - 1)
+    result[0::2] = lst
+    return result
+
+def get_value_list(the_dict):
+
+    """ coverts the dict into list of values 
+        (with brackets for merging
+    """
+
+    val = []
+    for key, value in the_dict.items():
+        value = add_brackets(value)
+        val.append(value)
+    return val
+
+def add_brackets(the_list):
+    LBRKT = "("
+    RBRKT = ")"
+    if len(the_list) > 1:
+        the_list.insert(0,LBRKT)
+        the_list.append(RBRKT)
+    return the_list
+
+def flatten_list(the_list):
+    flat_list = []
+    flat_list = [item for sublist in the_list for item in sublist]
+    """ 
+    for i in range(len(the_list)):
+        flat_list.append(the_list[i])
+        print_yellow(the_list[i])
+        if i != len(the_list) - 1:
+            #flat_list.append("OR")
+            pass
+    """
+    return flat_list
 
 def main():
     lex_scan = Scanner("/home/u/git/last_chance/Lexical/lexical3.txt")
@@ -245,6 +289,15 @@ def main():
 
     print_blue(lex_scan.punctuations)
     print_purple(lex_scan.keywords)
+
+    RD_list = lex_scan.get_RD_list()
+    RD_list = intersperse(RD_list,["OR"])
+    #print(flatten_list(RD_list))
+
+    # this list contains all RDs ored
+    flat_list = flatten_list(RD_list)
+
+    print(flat_list)
     
 
    

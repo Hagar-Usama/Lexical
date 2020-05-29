@@ -1,5 +1,11 @@
 import ast
 
+STAR = 'STAR'
+CONCAT = 'CONCAT'
+OR = 'OR'
+QSNMRK = 'QSNMRK'      
+PLUS = 'PLUS'
+
 class RegExp:
 
     def __init__(self, exp_list,  operators, star='*'):
@@ -29,33 +35,39 @@ class RegExp:
 
 
                 print(x,y)
+                #print(x in op)
+                #print(y in op)
 
+                
                 if y not in op:
-                    if (x not in op) or (x == self.star) or (x == ")"):
+                    print("y is NOT operator")
+                    if (x not in op) or (x == STAR) or (x == PLUS) or (x == QSNMRK) or (x == ")"):
                         exp_list.append(exp.pop(0))
-                        exp_list.append("concat")
-                        print("concat")
+                        exp_list.append("CONCAT")
+                        print("CONCAT")
                     else:
                         exp_list.append(exp.pop(0))
                         
                 else:
-                    # y is operand
-                    if x == self.star:
+                    # y is operator
+                    print("y is operator")
+
+                    if (x == STAR) or (x == PLUS) or (x == QSNMRK):
                         exp_list.append(exp.pop(0))
-                        exp_list.append("concat")
-                        print("concat")
+                        exp_list.append("CONCAT")
+                        print("CONCAT")
                     
                     elif (x not in op) and y == '(':
                         exp_list.append(exp.pop(0))
-                        exp_list.append("concat")
-                        print("concat")
+                        exp_list.append("CONCAT")
+                        print("CONCAT")
 
                     else:
                          exp_list.append(exp.pop(0))
         
         exp_list.append(exp.pop(0))
         self.cat_list = exp_list
-        self.operators.add('concat')
+        self.operators.add('CONCAT')
         return exp_list
 
     def handle_exp(self):
@@ -65,9 +77,11 @@ class RegExp:
         exp = self.exp_list
         op = self.operators
 
-        STAR = '*'
-        CONCAT = 'concat'
-        OR = "|"
+        STAR = 'STAR'
+        CONCAT = 'CONCAT'
+        OR = "OR"
+        PLUS = "PLUS"
+        QSNMRK = "QSNMRK"
         LBRKT = "("
         RBRKT = ")"
                        
@@ -79,27 +93,27 @@ class RegExp:
 
                 print(x,y)
 
-                if x == STAR:
-                    if (y == STAR) or (y == LBRKT):
+                if (x == STAR) or (x == PLUS) or (x == QSNMRK):
+                    if (y == STAR) or (y == PLUS) or (y == QSNMRK) or (y == LBRKT):
                         exp_list.append(exp.pop(0))
-                        exp_list.append("concat")
+                        exp_list.append("CONCAT")
                     elif y not in op:
                         exp_list.append(exp.pop(0))
-                        exp_list.append("concat")
+                        exp_list.append("CONCAT")
                     else:
                         exp_list.append(exp.pop(0))
                 
                 elif x == OR:
                     if y == LBRKT:
                         exp_list.append(exp.pop(0))
-                        #exp_list.append("concat")
-                    elif (y == STAR) or (y == OR) or (y == RBRKT):
+                        #exp_list.append("CONCAT")
+                    elif (y == STAR) or (y == PLUS) or (y == QSNMRK) or (y == OR) or (y == RBRKT):
                         print("Error!")
                     else:
                         exp_list.append(exp.pop(0))
 
                 elif x == LBRKT:
-                    if (y == STAR) or (y == OR):
+                    if (y == STAR) or (y == PLUS) or (y == QSNMRK) or (y == OR):
                         print("Error!")
                     else:
                         exp_list.append(exp.pop(0))
@@ -107,14 +121,14 @@ class RegExp:
                 elif x == RBRKT:
                     if (y == LBRKT) or (y not in op):
                         exp_list.append(exp.pop(0))
-                        exp_list.append("concat")
+                        exp_list.append("CONCAT")
                     else:
                         exp_list.append(exp.pop(0))
 
                 elif x not in op:
                     if (y == LBRKT) or (y not in op):
                         exp_list.append(exp.pop(0))
-                        exp_list.append("concat")
+                        exp_list.append("CONCAT")
                     else:
                         exp_list.append(exp.pop(0))
 
@@ -122,7 +136,7 @@ class RegExp:
         
         exp_list.append(exp.pop(0))
         self.cat_list = exp_list
-        self.operators.add('concat')
+        self.operators.add('CONCAT')
         return exp_list
 
 
@@ -164,7 +178,6 @@ class RegExp:
         operators = self.operators
 
         exp = self.cat_list
-
         print(f"catlist = {self.cat_list}")
 
         for i in exp:
@@ -182,7 +195,6 @@ class RegExp:
                 # if it is an operand
                 output.append(i)
             else:
-
                 while opstack:
                     p_stack = self.get_precedence(opstack[-1])
                     p_current = self.get_precedence(i)
@@ -196,10 +208,7 @@ class RegExp:
                 
                 opstack.append(i)
                 print(f"opstack : {opstack}")
-
-
-        
-                     
+   
                 
         while opstack:
             output.append(opstack.pop(-1))   
@@ -211,12 +220,18 @@ class RegExp:
     def get_precedence(self, op):
 
         #print(f"operand entered = {op}")
+        STAR = "STAR"
+        PLUS = "PLUS"
+        QSTMRK = "QSTMRK"
+        CONCAT = "CONCAT"
+        OR = "OR"
         
-        if (op == '*') or (op == '+') or (op == '?'):
+        
+        if (op == STAR) or (op == PLUS) or (op == QSNMRK):
             return 2
-        elif (op == 'concat'):
+        elif (op == CONCAT):
             return 3
-        elif (op == '|'):
+        elif (op == OR):
             return 4
         else:
             return 50
