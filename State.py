@@ -1,6 +1,6 @@
 import collections
 from color_print import print_blue, print_green, print_purple, print_red, print_yellow
-
+import time
 
 class State:
     def __init__(self):
@@ -149,6 +149,7 @@ def build_DFA(DFA_dict, init_state):
         print(f"state_list: {state_list}")
         print_green(f"visited: {visited}")        
         state = state_list.pop(0)
+        print_blue(f"current state is {state}")
         state_trans = set()
         
         visited.add(frozenset(state))
@@ -156,6 +157,7 @@ def build_DFA(DFA_dict, init_state):
         
         ip_dict = dfa_aux(DFA_dict, state)
         print_purple(f"ip_dict is: {ip_dict}")
+        # time.sleep(1)
         for i in ip_dict:
             if i != '#':
                 to_state = set()
@@ -179,7 +181,7 @@ def build_DFA(DFA_dict, init_state):
                 dfa_table[frozenset(state)][i] = frozenset(to_state)
 
 
-                if to_state not in state_list:
+                if (to_state not in state_list) and (to_state not in visited):
                     state_list.append(to_state)
 
             else:

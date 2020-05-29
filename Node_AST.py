@@ -159,6 +159,11 @@ def pre_followpos(cn):
                     cn.nullable = True
                     cn.firstpos.update(cn.left.firstpos)
                     cn.lastpos.update(cn.left.lastpos)
+                
+                elif cn.name == PLUS:
+                    cn.nullable = cn.left.nullable
+                    cn.firstpos.update(cn.left.firstpos)
+                    cn.lastpos.update(cn.left.lastpos)
 
                 elif cn.name == CONCAT:
                     pre_followpos(cn.right)
@@ -194,10 +199,7 @@ def pre_followpos(cn):
                     cn.firstpos.update(cn.left.firstpos)
                     cn.lastpos.update(cn.left.lastpos)
 
-                elif cn.name == PLUS:
-                    cn.nullable = cn.left.nullable
-                    cn.firstpos.update(cn.left.firstpos)
-                    cn.lastpos.update(cn.left.lastpos)
+                
           
 
 def eval_followpos(cn):
@@ -214,7 +216,7 @@ def eval_followpos(cn):
                 
                 cn.id_dict[i].followpos.update(cn.right.firstpos)
                
-        elif cn.name == STAR:
+        elif (cn.name == STAR) or (cn.name == PLUS):
             for i in cn.lastpos:
                 cn.id_dict[i].followpos.update(cn.firstpos)
                 

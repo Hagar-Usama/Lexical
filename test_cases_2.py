@@ -4,7 +4,7 @@ from RegExp import RegExp
 from Node_AST import Node_AST, build_AST_tree, print_tree, pre_followpos, get_node_dict, eval_followpos
 from State import dfa_aux, build_DFA, DFA
 from color_print import print_blue, print_green, print_purple, print_red, print_yellow, ANSI_RED, ANSI_RESET
-
+import time
 
 def run_example():
 
@@ -76,8 +76,8 @@ def run_example_2():
            '(', 'digit', 'PLUS', ')', 'OR',
            '(', 'digit', 'PLUS', 'OR', 'digit', 'PLUS', '.', 'digits', '(', '𝛆', 'OR', 'E', 'digits', ')', ')'
         ]
-    """
-     exp =[ '(', 'letter', '(', 'letter', 'OR', 'digit', ')', 'STAR', ')', 'OR',
+    
+    exp =[ '(', 'letter', '(', 'letter', 'OR', 'digit', ')', 'STAR', ')', 'OR',
            '(', 'digit', 'PLUS', ')', 'OR',
            '(', 'digit', 'PLUS', 'OR', 'digit', 'PLUS', '.', 'digits', '(', '𝛆', 'OR', 'E', 'digits', ')', ')', 'OR',
            '(', '=', 'OR', '<>', 'OR', '>', 'OR', '>=', 'OR', '<', 'OR', '<=', ')', 'OR',
@@ -85,7 +85,7 @@ def run_example_2():
            '(', '+', 'OR', '-', ')', 'OR',
            '++', 'OR',
            '--'] 
-    """
+   
     operators = {'(', ')', 'STAR', 'OR', 'PLUS'}
 
     # build RE and concats
@@ -126,28 +126,31 @@ def run_example_2():
     ## prepare for building the DFA
     ## the firstpos of root is the first state in the DFA
     root_s = tree.firstpos
+    print_blue(f"first of root:{root_s}")
     
     ## now, let's build our DFA
     dfa_table, accept_states = build_DFA(DFA_dict, root_s)
+
     
     #print_red(post)
     #print_blue(root_s)
     #print_yellow("DFA table is")
     #print_purple(dfa_table)
-    #print_purple(accept_states)
+    print_purple(f"accept :{accept_states}")
 
     ## create your DFA machine
-    #machine = DFA(dfa_table, accept_states, frozenset(root_s))
+    machine = DFA(dfa_table, accept_states, frozenset(root_s))
     
     ## now simulate your input with the DFA
     #input_list = "ccEccEcXcE"
-    #input_list = ['digit','PLUS','.','digits']
+    # digit + . digits ( \L | E digits )
+    input_list = ['digit','digit','.','digits','E','digits']
 
-    #machine.simulate_dfa_2(input_list,[])
+    machine.simulate_dfa_2(input_list,[])
     
     ## get the accepted tokens to compare it later with each pattern
-    #accepted_tokens = machine.accepted_tokens
-    #print_yellow(f"{accepted_tokens}")
+    accepted_tokens = machine.accepted_tokens
+    print_yellow(f"{accepted_tokens}")
     #print(accepted_tokens[1][0])
 
 def check_postfix(post_exp):
