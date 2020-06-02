@@ -1,4 +1,7 @@
 import enum
+import copy
+
+
 
 id = 0
 STAR = 'STAR'
@@ -32,7 +35,7 @@ class Node_AST:
         self.id_dict = {}
 
     def isRoot(self):
-        return self.parrent == None
+        return self.parent == None
     
     def isLeaf(self):
         return (self.left == None) and (self.right == None)
@@ -50,6 +53,44 @@ class Node_AST:
         else:
             if self.parent.left == self:
                 return True
+
+
+    def find_key(self, key):
+        found = []
+        found = find_key(self, key, found)
+        return found
+
+    def assign_id(self):
+        assign_id(self)
+
+
+    def attach_node(self, term, exp):
+
+        found = self.find_key(term)
+
+        ## operators may be omitted from the function I guess
+        # exp shall be postfix
+        branch = build_AST_tree(exp, self.operators)
+        
+        ##########################
+        ## trying to attach nodes
+        ##########################
+
+        for i in found:
+
+            parent = i.parent
+            lefty = i.isLeft()
+            i.parent = None
+            
+            # free(i)
+            del i
+
+            if lefty:
+                parent.left = copy.deepcopy(branch)
+            else:
+                parent.right = copy.deepcopy(branch)
+
+    
 
     
     def get_DFA_dict(self):
@@ -299,6 +340,7 @@ def build_AST_tree(postfix_exp , op_list):
             
             s.append(current_node)
 
+        # this may be useless ( remove when assign id is done)
         for n in node_list:
             if n.isLeaf() and n.name != '𝛆':
                 
@@ -308,6 +350,34 @@ def build_AST_tree(postfix_exp , op_list):
             else:
                 n.id = 0
 
-
-            
         return s[0]
+
+
+def find_key(n, key, found):
+    """ returns a list of found leaves """
+
+    if n != None:
+
+        find_key(n.left, key, found)
+        find_key(n.right, key, found)
+
+        if n.name == key:
+            found.append(n)
+    
+    return found
+
+def assign_id(n):
+    
+    if n != None:
+        assign_id(n.left)
+        assign_id(n.right)
+
+        if n.isLeaf() and n.name != '𝛆':
+                
+                global id
+                n.id = id + 1
+                id +=1
+        else:
+                n.id = 0
+    
+        
