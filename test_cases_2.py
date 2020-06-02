@@ -358,9 +358,21 @@ def run_example_4():
     ## now build AST
     tree = build_AST_tree(post,operators)
 
+    t = tree.left.left.left.left.left
+    print_blue(t.get_root())
+    print_blue(tree)
     ## add the REs !!
     for term, exp in REs.items():
         tree.attach_node(term, exp)
+
+    ## add keywords and punctuations
+    key_pun = ['(', 'do', 'OR', 'integer', 'OR', ';', 'OR', ':', 'OR', 'end',
+               'OR', '.', 'OR', 'program', 'OR', 'while', 'OR', 'then', 'OR',
+               'if', 'OR', 'var', 'OR', 'begin', 'OR', 'read', 'OR', ')', 'OR',
+               'else', 'OR', ',', 'OR', 'write', 'OR', 'real', 'OR']
+
+    tree.implant_node(tree, key_pun)
+
 
         
 
@@ -370,28 +382,28 @@ def run_example_4():
 
     
     ## get firstpos and lastpos and nullables (+, ? not yet)
-    #pre_followpos(tree)
+    pre_followpos(tree)
     
     ## store in root the ids for leaves
-    #get_node_dict(tree)
+    get_node_dict(tree)
 
     ## evaluate followpos for the DFA
-    #eval_followpos(tree)
+    eval_followpos(tree)
 
     ## print tree to show
-    #tree.print_tree()
+    tree.print_tree()
 
     ## get a dict for id: (name , followpos)
-    #DFA_dict = tree.get_DFA_dict()
-    #print_green(DFA_dict)
+    DFA_dict = tree.get_DFA_dict()
+    print_green(DFA_dict)
 
     ## prepare for building the DFA
     ## the firstpos of root is the first state in the DFA
-    #root_s = tree.firstpos
-    #print_blue(f"first of root:{root_s}")
+    root_s = tree.firstpos
+    print_blue(f"first of root:{root_s}")
     
     ## now, let's build our DFA
-    #dfa_table, accept_states = build_DFA(DFA_dict, root_s)
+    dfa_table, accept_states = build_DFA(DFA_dict, root_s)
 
     
     #print_red(post)
@@ -401,7 +413,7 @@ def run_example_4():
     #print_purple(f"accept :{accept_states}")
 
     ## create your DFA machine
-    #machine = DFA(dfa_table, accept_states, frozenset(root_s))
+    machine = DFA(dfa_table, accept_states, frozenset(root_s))
     
     ## now simulate your input with the DFA
     #input_list = "ccEccEcXcE"
@@ -409,12 +421,15 @@ def run_example_4():
     #input_list = ['digit','digit','.','digits','E','digits']
     # digit + . digits ( \L | E digits )
     #input_list = ['digit','digit', '.', 'digit','digit']
+    input_list = "program example;"
+    input_list = list(input_list)
 
-    #machine.simulate_dfa_2(input_list,[])
+
+    machine.simulate_dfa_2(input_list,[])
     
     ## get the accepted tokens to compare it later with each pattern
-    #accepted_tokens = machine.accepted_tokens
-    #print_yellow(f"{accepted_tokens}")
+    accepted_tokens = machine.accepted_tokens
+    print_yellow(f"{accepted_tokens}")
 
 
 def check_postfix(post_exp):

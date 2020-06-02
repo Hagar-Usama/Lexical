@@ -54,6 +54,17 @@ class Node_AST:
             if self.parent.left == self:
                 return True
 
+    def get_root(self):
+
+        n = self
+        while True:
+            if n.parent != None:
+                n = n.parent
+            else:
+                break
+
+        return n
+
 
     def find_key(self, key):
         found = []
@@ -92,8 +103,32 @@ class Node_AST:
             else:
                 parent.right = copy.deepcopy(branch)
 
-    
+    @staticmethod
+    def implant_node(n, exp):
+        """ implant node  <not implemented>"""
+        root = n.get_root()
+        #most_right = root.right
+        left = root.left
 
+        operators = {'(', ')', 'STAR', 'OR', 'PLUS'}
+        branch = build_AST_tree(exp, operators)
+        
+        or_branch = Node_AST("OR", root)
+
+        or_branch.right = branch
+        branch.parent = or_branch
+
+        or_branch.left = left
+        left.parent = or_branch
+
+        root.left = or_branch
+        
+
+
+
+
+
+        pass
     
     def get_DFA_dict(self):
         DFA_dict = {}

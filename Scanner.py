@@ -93,7 +93,15 @@ class Scanner:
 
         #return pn, kw, REs, RDs
 
+    def postfix_keyword_punc(self):
 
+        kw_pn = self.keywords.union(self.punctuations)
+        kw_pn = intersperse(list(kw_pn) ,"OR")
+        kw_pn.remove("OR")
+        kw_pn.append("OR")
+
+        return kw_pn
+    
     def get_buffer(self):
         file = open(self.lex_path)
         self.buffer = file.read().replace("\n", "\n")
@@ -299,8 +307,14 @@ def main():
 
     # this list contains all RDs ored
     flat_list = flatten_list(RD_list)
+    kw_exp = intersperse(lex_scan.keywords,"OR")
+    print_purple(kw_exp)
+    pn_exp = intersperse(lex_scan.punctuations,"OR")
+    print_blue(pn_exp)
 
     print(flat_list)
+
+    print_red(lex_scan.postfix_keyword_punc())
     
 
    
