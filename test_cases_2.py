@@ -1,6 +1,6 @@
 
 import pytest
-from RegExp import RegExp
+from RegExp import RegExp, postfix_me
 from Node_AST import Node_AST, build_AST_tree, print_tree, pre_followpos, get_node_dict, eval_followpos
 from State import dfa_aux, build_DFA, DFA
 from color_print import print_blue, print_green, print_purple, print_red, print_yellow, ANSI_RED, ANSI_RESET

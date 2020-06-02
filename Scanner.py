@@ -281,6 +281,9 @@ def flatten_list(the_list):
 def main():
     lex_scan = Scanner("/home/u/git/last_chance/Lexical/lexical3.txt")
     lex_scan.analaze_lex()
+
+    print_red(lex_scan.RE)
+    
     for key, value in lex_scan.RD.items():
         print_yellow(f"{key}=>{value}")
 
