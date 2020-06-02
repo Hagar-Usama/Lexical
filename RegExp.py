@@ -270,7 +270,8 @@ class RegExp:
         
         return self.get_precedence(i) < self.get_precedence(opstack[-1])
 
-                                                 
+
+
 def postfix_me(exp_dict, operators):
 
     """
@@ -278,15 +279,33 @@ def postfix_me(exp_dict, operators):
     """
 
     new_dict = {}
-
-    for key, value in exp_dict.items():
-        r = RegExp(value, operators, STAR)
+    tuple_list = []
+    """ 
+    for k, v in ((k, exp_dict[k]) for k in reversed(exp_dict)):
+        r = RegExp(v, operators, STAR)
         exp2 = r.handle_exp()
         print(exp2)
         post = r.get_postfix()
-        new_dict[key] = post
+        new_dict[k] = post
+    """
 
-    return new_dict
+     
+    for key, value in exp_dict.items():
+
+        r = RegExp(value, operators, STAR)
+        exp2 = r.handle_exp()
+        #print(exp2)
+        post = r.get_postfix()
+        #new_dict[key] = post
+        tuple_list.insert(0,(key,post))
+
+    
+    post_dict = dict(tuple_list)
+    
+    #print_blue(tuple_list)
+    print_green(post_dict)
+    return post_dict
+    
 
 
         

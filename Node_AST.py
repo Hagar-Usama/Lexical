@@ -70,7 +70,9 @@ class Node_AST:
 
         ## operators may be omitted from the function I guess
         # exp shall be postfix
-        branch = build_AST_tree(exp, self.operators)
+        operators = {'(', ')', 'STAR', 'OR', 'PLUS'}
+
+        branch = build_AST_tree(exp, operators)
         
         ##########################
         ## trying to attach nodes
