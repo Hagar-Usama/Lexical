@@ -350,7 +350,7 @@ def main():
     pn_exp = intersperse(lex_scan.punctuations,"OR")
     print_blue(pn_exp)
 
-    print(flat_list)
+    print_purple(flat_list)
 
     print_red(lex_scan.postfix_keyword_punc())
 

@@ -52,3 +52,5 @@ I have explored different references so far. Thus, I would say I have a complete
 * rd to be entered without '#'
 * add '#' . directly to post-fix expression to avoid confusion
 * dfa_simulate_2 is recursive it returns output in reverse order
+* as you replace 'e' with its symbol, replace '(' with LBRKT and ')' RBRKT
+and mind that in postfix

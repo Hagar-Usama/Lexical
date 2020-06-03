@@ -377,6 +377,7 @@ def build_AST_tree(postfix_exp , op_list):
             
             s.append(current_node)
 
+        """
         # this may be useless ( remove when assign id is done)
         for n in node_list:
             if n.isLeaf() and n.name != '𝛆':
@@ -385,7 +386,8 @@ def build_AST_tree(postfix_exp , op_list):
                 n.id = id + 1
                 id +=1
             else:
-                n.id = 0
+                n.id = 0 
+        """
 
         return s[0]
 
