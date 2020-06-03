@@ -421,15 +421,45 @@ def run_example_4():
     #input_list = ['digit','digit','.','digits','E','digits']
     # digit + . digits ( \L | E digits )
     #input_list = ['digit','digit', '.', 'digit','digit']
-    input_list = "program example;"
+    input_list = "example;"
     input_list = list(input_list)
+    input_lists = ['program', 'example', ';', 'var', 'sum', ',', 'count',
+                   ':', 'integer', ';', 'begin', 'pass', '++', ';', 'pass',
+                   '--', ';', 'while', 'pass', '<>', '10', 'do', 'begin',
+                   'pass', ':=', 'pass', '+', '1', ';', 'read', '(mnt)',
+                   ';', 'if', 'mnt', '<=', '0', 'then', 'count', ':=',
+                    'count', '+','1.234', 'else', 'sum', ':=', 'sum', '+',
+                    'mnt', 'end', ';', 'write', '(sum', ',', 'count)', 'end.']
+
+    ac_tok = []
+    for tok in input_lists:
+        machine.accepted_tokens = []
+        machine.simulate_dfa_2(tok,[])
+        accepted_tokens = machine.accepted_tokens
+        ac_tok = ac_tok + accepted_tokens
+
+        #trans = []
+        #for j in accepted_tokens:
+        #    trans.append(str(j))
+
+        #ac_tok = ac_tok + trans
+    #accepted_tokens = machine.accepted_tokens
+    #print_green(accepted_tokens)
+    for j in ac_tok:
+        print(''.join(j),end='\t')
 
 
-    machine.simulate_dfa_2(input_list,[])
+
+
+
+    #machine.simulate_dfa_2(input_list,[])
     
     ## get the accepted tokens to compare it later with each pattern
-    accepted_tokens = machine.accepted_tokens
-    print_yellow(f"{accepted_tokens}")
+    #accepted_tokens = machine.accepted_tokens
+    #print_yellow(f"{accepted_tokens}")
+    #print_yellow(f"{ac_tok}")
+    #print_blue(len(ac_tok))
+
 
 
 def check_postfix(post_exp):

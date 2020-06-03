@@ -65,7 +65,7 @@ class DFA:
                     break
 
             if tokens_accept:
-                self.accepted_tokens.append(tokens_accept[-1])
+                self.accepted_tokens.insert(0,tokens_accept[-1])
 
 
 

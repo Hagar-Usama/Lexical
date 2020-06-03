@@ -11,6 +11,7 @@ class Scanner:
         self.RD = dict()
         self.buffer = ""
         self.input_list = []
+        self.program_list = []
         
 
     
@@ -107,6 +108,23 @@ class Scanner:
         self.buffer = file.read().replace("\n", "\n")
         file.close()
         self.buffer = self.buffer.strip()
+
+    @staticmethod
+    def read_file(path):
+        file = open(path)
+        buffer = file.read().replace("\n", "\n")
+        file.close()
+        buffer = buffer.strip()
+        return buffer
+
+   
+    def read_program_file(self, path):
+        buffer = self.read_file(path)
+        buffer = re.sub('\s+',' ',buffer)
+        buffer = buffer.split(' ')
+        self.program_list = buffer
+        return buffer
+
 
     def list_rules(self):
 
@@ -315,6 +333,10 @@ def main():
     print(flat_list)
 
     print_red(lex_scan.postfix_keyword_punc())
+
+
+    lex_scan.read_program_file("/home/u/git/last_chance/Lexical/program3.txt")
+    print_blue(lex_scan.program_list)
     
 
    
