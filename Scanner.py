@@ -1,6 +1,7 @@
 import re
 from color_print import print_blue, print_green, print_purple, print_red, print_yellow, ANSI_RED, ANSI_RESET
-
+from itertools import chain
+from copy import copy, deepcopy
 
 class Scanner:
     def __init__(self, lexical_path):
@@ -47,7 +48,25 @@ class Scanner:
         
     def get_RE_list(self):
         return get_value_list(self.RE)
-    
+
+    def expand_rd(self, r):
+        
+        rd_temp = copy(self.RD)
+        new_rd = {}
+
+        for i in range(1,r):
+            for k,v in rd_temp.items():
+                for key, value in self.RE.items():
+                    #print_yellow(f"{i}, {j}")
+                    a = rd_temp[k]
+                    #print(a)
+                    a = list(chain.from_iterable(value if item == key else [item] for item in a))
+                    rd_temp[k] = a
+            
+        #print_purple(rd_temp)
+        self.expanded_rd = rd_temp
+     
+
     
     def handle_lexical(self):
 
@@ -246,6 +265,7 @@ def handle_re(input_list):
 
     return input_list
 
+
 def list_rules(RE, RD):
 
     """
@@ -337,6 +357,11 @@ def main():
 
     lex_scan.read_program_file("/home/u/git/last_chance/Lexical/program3.txt")
     print_blue(lex_scan.program_list)
+
+
+    lex_scan.expand_rd(3)
+    print_green(lex_scan.expanded_rd)
+    print(lex_scan.RD)
     
 
    

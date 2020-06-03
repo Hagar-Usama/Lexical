@@ -10,7 +10,7 @@ I have explored different references so far. Thus, I would say I have a complete
 
 ## Plan (schedule)
 * Today: 23 May
-* Actual Deadline: 30 May
+* Actual Deadline: 6 Jun
 * Phase Deadline: 29 May
 
 ---
@@ -39,10 +39,11 @@ I have explored different references so far. Thus, I would say I have a complete
 * [x] make unique id for leaves only (expect for epsilon)
 * [x] add + and ? to Regex
 * [ ] Minimize DFA
-* [ ] add RE nodes to RD tree
-* [ ] append keywords and punctuation
-* [ ] format input code
-
+* [x] add RE nodes to RD tree
+* [x] append keywords and punctuation
+* [x] format input code
+* [ ] make sub DFAs for each RD
+* [ ] subs REs in RDs
 * [ ] report
 
 ---
