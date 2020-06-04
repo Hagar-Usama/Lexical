@@ -11,6 +11,93 @@ def get_current_directory():
     current_path = os.path.dirname(os.path.abspath(__file__))
     return current_path
 
+def build_my_tree(exp, operators):
+    
+    # build RE and concats
+    print_yellow(f"operators: {operators}")
+    r = RegExp(exp, operators, star="STAR")
+    mod_list = r.handle_exp()
+    print_green(mod_list)
+
+        
+    ## eval postfix expression for the AST
+    post = r.get_postfix()
+
+
+    ## I do not add # above to avoid some confusion
+    post.append("#")
+    post.append("CONCAT")
+    print_yellow(f"postfix exp: {post}")
+
+    ## now build AST
+    tree = build_AST_tree(post,operators)
+
+    return tree
+
+def expand_my_tree(tree, REs, pn_kw, operators):
+    ## add the REs !!
+    REs = postfix_me(REs, operators)
+    #print_red(REs)
+    
+    for term, exp in REs.items():
+        tree.attach_node(term, exp)
+
+    ## add keywords and punctuations
+    tree.implant_node(tree, pn_kw)
+    
+    tree.assign_id()
+
+def eval_tree(tree):
+    ## get firstpos and lastpos and nullables (+, ? not yet)
+    pre_followpos(tree)
+    
+    ## store in root the ids for leaves
+    get_node_dict(tree)
+
+    ## evaluate followpos for the DFA
+    eval_followpos(tree)
+
+def dfa_mine(tree):
+
+    ## get a dict for id: (name , followpos)
+    DFA_dict = tree.get_DFA_dict()
+    #print_green(DFA_dict)
+
+    ## prepare for building the DFA
+    ## the firstpos of root is the first state in the DFA
+    root_s = tree.firstpos
+    #print_blue(f"first of root:{root_s}")
+    
+    ## now, let's build our DFA
+    dfa_table, accept_states = build_DFA(DFA_dict, root_s)
+
+    
+    ## create your DFA machine
+    machine = DFA(dfa_table, accept_states, frozenset(root_s))
+    
+    return machine
+
+def get_tokens(machine, input_lists):
+    ac_tok = []
+    for tok in input_lists:
+        machine.accepted_tokens = []
+        machine.simulate_dfa_2(tok,[])
+        accepted_tokens = machine.accepted_tokens
+        ac_tok = ac_tok + accepted_tokens
+    
+    return ac_tok
+
+def get_tokens_sole(machine, tok):
+    ac_tok = []
+
+    machine.accepted_tokens = []
+    machine.simulate_dfa_2(tok,[])
+    accepted_tokens = machine.accepted_tokens
+    ac_tok = ac_tok + accepted_tokens
+    
+    return ac_tok
+
+
 
 def main():
 
@@ -23,18 +110,6 @@ def main():
     ## init scanner 
     lex_scan = Scanner(lex_path)
     lex_scan.analaze_lex()
-
-    # print_red(lex_scan.RE)
-    
-    ## print RD, RE dicts, punctuations, and keywords
-    #for key, value in lex_scan.RD.items():
-    #    print_yellow(f"{key}=>{value}")
-
-    #for key, value in lex_scan.RE.items():
-    #    print_green(f"{key}=>{value}")
-
-    #print_blue(lex_scan.punctuations)
-    #print_purple(lex_scan.keywords)
 
     ## list the RD dict
     RD_list = lex_scan.get_RD_list()
@@ -73,82 +148,53 @@ def main():
     # now lets build AST 
     #######################
 
-    operators = {'(', ')', 'STAR', 'OR', 'PLUS'}
-
-    # build RE and concats
-
-    exp = flat_list
-
-    r = RegExp(exp, operators, star="STAR")
-    mod_list = r.handle_exp()
-
-        
-    ## eval postfix expression for the AST
-    post = r.get_postfix()
-
-
-    ## I do not add # above to avoid some confusion
-    post.append("#")
-    post.append("CONCAT")
-    print_yellow(f"postfix exp: {post}")
-
-    ## now build AST
-    tree = build_AST_tree(post,operators)
+    operators = {'(', ')', 'STAR', 'OR', 'PLUS', 'CONCAT'}
+    tree = build_my_tree(flat_list, operators.copy())
+    expand_my_tree(tree, lex_scan.RE , pn_kw, operators)
+    eval_tree(tree)
     
-    ## add the REs !!
-    REs = lex_scan.RE
-    REs = postfix_me(REs, operators)
-    print_red(REs)
-    
-     
-    for term, exp in REs.items():
-        tree.attach_node(term, exp)
-
-    ## add keywords and punctuations
-    tree.implant_node(tree, pn_kw)
-    
-    tree.assign_id()
-    tree.print_tree()
-    
-    ## get firstpos and lastpos and nullables (+, ? not yet)
-    pre_followpos(tree)
-    
-    ## store in root the ids for leaves
-    get_node_dict(tree)
-
-    ## evaluate followpos for the DFA
-    eval_followpos(tree)
-
     ## print tree to show
     tree.print_tree()
 
-    ## get a dict for id: (name , followpos)
-    DFA_dict = tree.get_DFA_dict()
-    #print_green(DFA_dict)
+    machine = dfa_mine(tree)
+    input_lists = lex_scan.program_list.copy()
+    ac_tok = get_tokens(machine, input_lists)
 
-    ## prepare for building the DFA
-    ## the firstpos of root is the first state in the DFA
-    root_s = tree.firstpos
-    #print_blue(f"first of root:{root_s}")
-    
-    ## now, let's build our DFA
-    dfa_table, accept_states = build_DFA(DFA_dict, root_s)
-
-    
-    ## create your DFA machine
-    machine = DFA(dfa_table, accept_states, frozenset(root_s))
-    
-    input_lists = lex_scan.program_list
-
-    ac_tok = []
-    for tok in input_lists:
-        machine.accepted_tokens = []
-        machine.simulate_dfa_2(tok,[])
-        accepted_tokens = machine.accepted_tokens
-        ac_tok = ac_tok + accepted_tokens
 
     for j in ac_tok:
         print(''.join(j),end='\t')
+
+    
+
+    for key, val in lex_scan.expanded_rd.items():
+
+        print_green(val)
+        tree1 = build_my_tree(val,operators.copy())
+        tree1.assign_id()
+        eval_tree(tree1)
+        m = dfa_mine(tree1)
+        # tree1.print_tree()
+
+        accepted_tokens = ac_tok
+        acc_tokens = []
+        for j in input_lists:
+           c =  get_tokens_sole(m, j)
+
+           if c:
+               acc_tokens.append(j)
+
+
+
+        print(key)
+        print_blue(input_lists)
+        print(acc_tokens)
+
+        
+        break
+       
+
+       
+
 
 
 if __name__ == "__main__":
