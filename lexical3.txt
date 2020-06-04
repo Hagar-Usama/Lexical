@@ -8,8 +8,8 @@ floatNum: digit + | digit + . digits ( \L | E digits )
 relop: \= | <> | > | >\= | < | <\=
 assign: \:\=
 {real begin end if else then while do read write}
-addop: \+ | -
 incop: \+\+
 decop: --
+addop: \+ | -
 mulop: \* | /
 [: ; , . \( \)]

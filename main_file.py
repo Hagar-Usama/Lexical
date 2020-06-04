@@ -112,6 +112,21 @@ def reverse_dict(the_dict):
 
     return new_dict
 
+def build_ouput_file(accepted_tokens, detection_table):
+
+    symbol_table = []
+    
+    for i in accepted_tokens:
+        str_d = detection_table[''.join(i)]
+        symbol_table.append(str_d)
+    return symbol_table
+
+def write_file(path_file, output_list):
+
+    with open(path_file, 'w') as filehandle:
+        for listitem in output_list:
+            filehandle.write('%s\n' % listitem)
+
 
 def main():
 
@@ -226,13 +241,14 @@ def main():
         k_str = ''.join(k)
         if k_str in lex_scan.keywords:
             visited_tokens.add(tuple(k))
-            detection_table[k_str] = k
+            detection_table[k_str] = k_str
 
     for k in accepted_tokens:
         k_str = ''.join(k)
+        print_purple(f"tok is ")
         if k_str in lex_scan.punctuations:
             visited_tokens.add(tuple(k))
-            detection_table[k_str] = k
+            detection_table[k_str] = k_str
 
     """ 
     for i in lex_scan.punctuations:
@@ -275,23 +291,14 @@ def main():
            #print("*")
 
         
-        
-
-    
     
     for key, value in detection_table.items():
         print_green(f"{key} , {value}")
 
-    symbol_table = []
-    
-    for i in accepted_tokens:
-        #print(i)
-        #print_blue(detection_table[i])
-        symbol_table.append(detection_table[''.join(i)])
-       
-    #print_yellow(symbol_table)
-       
-
+    symbol_table = build_ouput_file(accepted_tokens, detection_table)
+    print_yellow(symbol_table)
+    output_path = cd + '/' + 'output3.txt'
+    write_file(output_path, symbol_table)
 
 
 if __name__ == "__main__":
