@@ -125,4 +125,13 @@ def get_tokens_sole(machine, tok):
     if ac_tok2 == token_temp2:       
         return True
     return False
+
+
+def list_to_str(the_list):
+    new_list = []
+
+    for i in the_list:
+        new_list.append(''.join(i))
+
+    return new_list
     
