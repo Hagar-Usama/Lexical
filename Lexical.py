@@ -289,9 +289,9 @@ def main():
 
     ## get directory for lexical and program
     cd = get_current_directory()
-    lex_file = 'lexical3.txt'
+    lex_file = 'lexical1.txt'
     lex_path = cd + '/' +  lex_file
-    program_path = cd + '/' + 'program3.txt'
+    program_path = cd + '/' + 'program1.txt'
 
     ## build full dfa
     lx = Lexical()
@@ -357,8 +357,15 @@ def main():
     symbol_table = build_ouput_file(accepted_tokens, detection_table)
     print("")
     print_yellow(symbol_table)
-    output_path = cd + '/' + 'output3.txt'
+    output_path = cd + '/' + 'output1.txt'
     write_file(output_path, symbol_table)
+
+
+    #for k,v in dfa_tab.items():
+    #    print_blue(k)
+        #print_yellow(v)
+    #    for i in v:
+    #        print(i,v[i])
 
 
     

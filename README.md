@@ -48,6 +48,7 @@ I have explored different references so far. Thus, I would say I have a complete
 * [ ] sep keywords    (not really)
 * [ ] sep punctuation (not really)
 * [ ] tabulate DFA table
+* [x] test the case by diffmerge tool
 
 * [ ] report
 
