@@ -225,8 +225,6 @@ def main():
     exp_rd_rev = lex_scan.expanded_rd
     accepted_tokens = ac_tok.copy()
 
-    #print_blue(accepted_tokens)
-
     visited_tokens = set()
     detection_table = {}
 

@@ -28,7 +28,7 @@ class DFA:
         
 
         DEAD_STATE  = 0
-        print_blue("enter simulation")
+        #print_blue("enter simulation")
 
         tokens = []
         tokens_accept = []
@@ -42,21 +42,21 @@ class DFA:
         
             while input_list:
                 tok = input_list.pop(0)
-                print_green(f"token is {tok}")
+                #print_green(f"token is {tok}")
 
                 tokens.append(tok)
 
                 s = self.get_next_state(s, tok)
 
-                print_green(f"next state is: {s}")
+                #print_green(f"next state is: {s}")
                 
                 if s != DEAD_STATE:
                     if self.is_accepted(s):
                         tokens_accept.append(tokens.copy())
-                        print('accept')
+                        #print('accept')
                 
                 else:
-                    print("Dead state")
+                    #print("Dead state")
                     tokens = []
                     input_list.insert(0,tok)
                     

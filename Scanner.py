@@ -279,7 +279,7 @@ def handle_rd(input_list):
 
     input_list = [i.strip() for i in input_list]
     
-    print_red(f"input list RD: {input_list}")
+    #print_red(f"input list RD: {input_list}")
 
     ## separating 
     #for i in input_list:

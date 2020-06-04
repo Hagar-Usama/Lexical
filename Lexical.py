@@ -10,6 +10,124 @@ def get_current_directory():
     current_path = os.path.dirname(os.path.abspath(__file__))
     return current_path
     
+def write_file(path_file, output_list):
+
+    with open(path_file, 'w') as filehandle:
+        for listitem in output_list:
+            filehandle.write('%s\n' % listitem)
+
+def build_my_tree(exp, operators):
+    
+    # build RE and concats
+    #print_yellow(f"operators: {operators}")
+    r = RegExp(exp, operators, star="STAR")
+    mod_list = r.handle_exp()
+    #print_green(mod_list)
+
+        
+    ## eval postfix expression for the AST
+    post = r.get_postfix()
+
+
+    ## I do not add # above to avoid some confusion
+    post.append("#")
+    post.append("CONCAT")
+    #print_yellow(f"postfix exp: {post}")
+
+    ## now build AST
+    tree = build_AST_tree(post,operators)
+
+    return tree
+
+def reverse_dict(the_dict):
+    keys = list(the_dict.keys())
+    keys.reverse()
+    values = list(the_dict.values())
+    values.reverse()
+    new_dict = dict(zip(keys, values))
+
+    return new_dict
+
+def expand_my_tree(tree, REs, pn_kw, operators):
+    ## add the REs !!
+    REs = postfix_me(REs, operators)
+    #print_red(REs)
+    
+    for term, exp in REs.items():
+        tree.attach_node(term, exp)
+
+    ## add keywords and punctuations
+    tree.implant_node(tree, pn_kw)
+    
+    tree.assign_id()
+
+def eval_tree(tree):
+    ## get firstpos and lastpos and nullables (+, ? not yet)
+    pre_followpos(tree)
+    
+    ## store in root the ids for leaves
+    get_node_dict(tree)
+
+    ## evaluate followpos for the DFA
+    eval_followpos(tree)
+
+def dfa_mine(tree):
+
+    ## get a dict for id: (name , followpos)
+    DFA_dict = tree.get_DFA_dict()
+    #print_green(DFA_dict)
+
+    ## prepare for building the DFA
+    ## the firstpos of root is the first state in the DFA
+    root_s = tree.firstpos
+    #print_blue(f"first of root:{root_s}")
+    
+    ## now, let's build our DFA
+    dfa_table, accept_states = build_DFA(DFA_dict, root_s)
+
+    
+    ## create your DFA machine
+    machine = DFA(dfa_table, accept_states, frozenset(root_s))
+    
+    return machine
+
+def get_tokens(machine, input_lists):
+    ac_tok = []
+    for tok in input_lists:
+        machine.accepted_tokens = []
+        machine.simulate_dfa_2(tok,[])
+        accepted_tokens = machine.accepted_tokens
+        ac_tok = ac_tok + accepted_tokens
+    
+    return ac_tok
+
+def build_ouput_file(accepted_tokens, detection_table):
+
+    symbol_table = []
+    
+    for i in accepted_tokens:
+        str_d = detection_table[''.join(i)]
+        symbol_table.append(str_d)
+    return symbol_table
+
+def get_tokens_sole(machine, tok):
+    ac_tok = []
+    token_temp = tok.copy()
+    machine.accepted_tokens = []
+    machine.simulate_dfa_2(tok,[])
+    accepted_tokens = machine.accepted_tokens
+    ac_tok = ac_tok + accepted_tokens
+
+    #print_red(f"toks are: {token_temp}, {ac_tok}")
+    ac_tok2 = [''.join(x) for x in ac_tok]
+    ac_tok2 = ''.join(ac_tok2)
+    token_temp2 = ''.join(token_temp)
+
+    #print_green(f"ac_tok {ac_tok2}, {token_temp2}")
+    if ac_tok2 == token_temp2:       
+        return True
+    return False
+    
 
 class Lexical:
     def __init__(self, operators={'(', ')', 'STAR', 'OR', 'PLUS','CONCAT'}):
@@ -32,22 +150,15 @@ class Lexical:
 
         ## and OR in between
         RD_list = intersperse(RD_list,["OR"])
-        #print(flatten_list(RD_list))
-
-        # this list contains all RDs ored
-        ## flatten list or RD_list 
+        
         flat_list = flatten_list(RD_list)
         self.flat_list = flat_list
 
         ## or keywords
         kw_exp = intersperse(lex_scan.keywords,"OR")
-        #print_purple(kw_exp)
 
         ## or punctuations
         pn_exp = intersperse(lex_scan.punctuations,"OR")
-        #print_blue(pn_exp)
-
-        #print(flat_list)
 
         ## get postfix_exp of pn_kw
         pn_kw = lex_scan.postfix_keyword_punc()
@@ -58,7 +169,6 @@ class Lexical:
 
         ## expand rd (subs re in rd)
         lex_scan.expand_rd(3)
-        #print_green(lex_scan.expanded_rd)
         
         self.lex_scan = lex_scan
 
@@ -77,13 +187,13 @@ class Lexical:
             
         ## eval postfix expression for the AST
         post = r.get_postfix()
-        print_red(post)
+        #print_red(post)
 
 
         ## I do not add # above to avoid some confusion
         post.append("#")
         post.append("CONCAT")
-        print_yellow(f"postfix exp: {post}")
+        #print_yellow(f"postfix exp: {post}")
 
         ## now build AST
         tree = build_AST_tree(post,operators)
@@ -188,26 +298,72 @@ def main():
     lx.lex_path = lex_path
     lx.program_path = program_path
     lx.run_scan()
+    
     ac_tok = lx.dfa_stuff()
 
     for j in ac_tok:
         print(''.join(j),end='\t')
 
-    #print_yellow("RDs are")
-    #print_blue(lx.lex_scan.expanded_rd)
+    dfa_tab = lx.machine.dfa_table
 
-    DFAs = {}
+    print(len(dfa_tab))
+    print("*"*20)
+    ######################
+    ## build symbol table
+    ######################
+
+    operators={'(', ')', 'STAR', 'OR', 'PLUS','CONCAT'}
+
+     
+    exp_rd_rev = reverse_dict(lx.lex_scan.expanded_rd)
+    exp_rd_rev = lx.lex_scan.expanded_rd
+    accepted_tokens = ac_tok.copy()
+
+    visited_tokens = set()
+    detection_table = {}
+
+  
+    #print_blue(lx.lex_scan.keywords)
+    for k in accepted_tokens:
+        k_str = ''.join(k)
+        if k_str in lx.lex_scan.keywords:
+            visited_tokens.add(tuple(k))
+            detection_table[k_str] = k_str
+
+    for k in accepted_tokens:
+        k_str = ''.join(k)
+        if k_str in lx.lex_scan.punctuations:
+            visited_tokens.add(tuple(k))
+            detection_table[k_str] = k_str
+
+    for key, val in exp_rd_rev.items():
+
+        tree1 = build_my_tree(val,operators.copy())
+        tree1.assign_id()
+        eval_tree(tree1)
+        m = dfa_mine(tree1)
+        # tree1.print_tree()
+
+       
+        acc_tokens = []
+        for j in accepted_tokens:
+           if tuple(j) not in visited_tokens:
+               c =  get_tokens_sole(m, j.copy())
+               if c:
+                   visited_tokens.add(tuple(j))
+                   detection_table[''.join(j)] = key
+    
+    
+    symbol_table = build_ouput_file(accepted_tokens, detection_table)
+    print("")
+    print_yellow(symbol_table)
+    output_path = cd + '/' + 'output3.txt'
+    write_file(output_path, symbol_table)
+
 
     
-    #for key, val in lx.lex_scan.expanded_rd.items():
-    #    print_green(val)
-        #lex = Lexical()
-        #lex.flat_list = val       
-        #lex.build_my_tree()
-        #lex.eval_tree()
-        #lex.dfa_mine()
 
-        #DFAs[key] = lex
+
 
 
 

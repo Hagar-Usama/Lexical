@@ -38,12 +38,17 @@ I have explored different references so far. Thus, I would say I have a complete
 * [x] Simulate DFA
 * [x] make unique id for leaves only (expect for epsilon)
 * [x] add + and ? to Regex
-* [ ] Minimize DFA
+* [ ] Minimize DFA (algorithm already minimize it (lex algorithm))
 * [x] add RE nodes to RD tree
 * [x] append keywords and punctuation
 * [x] format input code
-* [ ] make sub DFAs for each RD
-* [ ] subs REs in RDs
+* [x] make sub DFAs for each RD
+* [x] subs REs in RDs
+* [x] sep REs
+* [ ] sep keywords    (not really)
+* [ ] sep punctuation (not really)
+* [ ] tabulate DFA table
+
 * [ ] report
 
 ---
