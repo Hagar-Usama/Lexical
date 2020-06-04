@@ -23,7 +23,7 @@ I have explored different references so far. Thus, I would say I have a complete
 
 ### Tasks
 
- ####  you can do it 💪 👐
+ ####  you can do it 💪 👐 ( yup I did it)
 * [x] input to RD
 * [x] add concat to RD (needs improvement)[done]
 * [x] RD to prefix
@@ -49,6 +49,7 @@ I have explored different references so far. Thus, I would say I have a complete
 * [ ] sep punctuation (not really)
 * [ ] tabulate DFA table
 * [x] test the case by diffmerge tool
+* [ ] consider module file to add your modules in
 
 * [ ] report
 
