@@ -94,9 +94,23 @@ def get_tokens_sole(machine, tok):
     machine.simulate_dfa_2(tok,[])
     accepted_tokens = machine.accepted_tokens
     ac_tok = ac_tok + accepted_tokens
-    
-    return ac_tok
 
+    if ac_tok:
+        return True
+    else:
+        return False
+    
+    return True if ac_tok else False
+
+
+def reverse_dict(the_dict):
+    keys = list(the_dict.keys())
+    keys.reverse()
+    values = list(the_dict.values())
+    values.reverse()
+    new_dict = dict(zip(keys, values))
+
+    return new_dict
 
 
 def main():
@@ -164,35 +178,118 @@ def main():
     for j in ac_tok:
         print(''.join(j),end='\t')
 
+    print_red(ac_tok)
+
     
+    exp_rd_rev = reverse_dict(lex_scan.expanded_rd)
+    accepted_tokens = ac_tok.copy()
 
-    for key, val in lex_scan.expanded_rd.items():
+    #print_blue(accepted_tokens)
 
-        print_green(val)
+    visited_tokens = set()
+    detection_table = {}
+
+    """
+    for i in accepted_tokens:
+        for j in lex_scan.keywords:
+            if tuple(i) not in visited_tokens:
+                if tuple(i) == tuple(j):
+                    visited_tokens.append(tuple(i))
+                    detection_table.append((i,tuple(j)))
+
+        for key, val in exp_rd_rev.items():
+            tree1 = build_my_tree(val,operators.copy())
+            tree1.assign_id()
+            eval_tree(tree1)
+            m = dfa_mine(tree1)
+
+            if tuple(i) not in visited_tokens:
+               c =  get_tokens_sole(m, i.copy())
+               if c:
+                   visited_tokens.append(tuple(i))
+                   detection_table.append((key,tuple(i)))
+
+    """
+
+    """  
+    for i in lex_scan.keywords:
+        for j in accepted_tokens:
+            if tuple(j) not in visited_tokens:
+                if tuple(i) == tuple(j):
+                    visited_tokens.add(tuple(j))
+                    #detection_table.append((i, ''.join(j)))
+                    detection_table[''.join(j)] = i
+                    print_green(f"{''.join(j)}, {i}")
+    """
+    print_blue(lex_scan.keywords)
+    for k in accepted_tokens:
+        k_str = ''.join(k)
+        if k_str in lex_scan.keywords:
+            visited_tokens.add(tuple(k))
+            detection_table[k_str] = k
+
+    for k in accepted_tokens:
+        k_str = ''.join(k)
+        if k_str in lex_scan.punctuations:
+            visited_tokens.add(tuple(k))
+            detection_table[k_str] = k
+
+    """ 
+    for i in lex_scan.punctuations:
+        for j in accepted_tokens:
+            if tuple(j) not in visited_tokens:
+                if tuple(i) == tuple(j):
+                    visited_tokens.add(tuple(j))
+                    #detection_table.append((i, ''.join(j)))
+                    detection_table[''.join(j)] = i
+                    print_green(f"{''.join(j)}, {i}")
+
+    """
+    for key, val in exp_rd_rev.items():
+
+        #print_green(val)
         tree1 = build_my_tree(val,operators.copy())
         tree1.assign_id()
         eval_tree(tree1)
         m = dfa_mine(tree1)
         # tree1.print_tree()
 
-        accepted_tokens = ac_tok
+       
         acc_tokens = []
-        for j in input_lists:
-           c =  get_tokens_sole(m, j)
-
-           if c:
-               acc_tokens.append(j)
-
-
-
-        print(key)
-        print_blue(input_lists)
-        print(acc_tokens)
+        for j in accepted_tokens:
+            #print_green(f"j of inpj")
+           print_red(f"j is {j}")
+           if tuple(j) not in visited_tokens:
+               c =  get_tokens_sole(m, j.copy())
+               if c:
+                   visited_tokens.add(tuple(j))
+                   #detection_table.append((key, ''.join(j)))
+                   detection_table[''.join(j)] = key
+                   print_green(f"{''.join(j)}, {key}")
+    
+           #print(f"c is {c}, <{j}>",end='   ')
+           
+    """     if c:
+               print_yellow(f"*.* accepted: {j}, {exp_rd_rev[key]} *.*") 
+    """
+           #print("*")
 
         
-        break
-       
+        
 
+    
+    
+    for key, value in detection_table.items():
+        print_green(f"{key} , {value}")
+
+    symbol_table = []
+    
+    for i in accepted_tokens:
+        #print(i)
+        #print_blue(detection_table[i])
+        symbol_table.append(detection_table[''.join(i)])
+       
+    #print_yellow(symbol_table)
        
 
 

@@ -28,7 +28,7 @@ class DFA:
         
 
         DEAD_STATE  = 0
-        print_blue("enter simulation")
+        #print_blue("enter simulation")
 
         tokens = []
         tokens_accept = []
@@ -42,21 +42,21 @@ class DFA:
         
             while input_list:
                 tok = input_list.pop(0)
-                print_green(f"token is {tok}")
+                #print_green(f"token is {tok}")
 
                 tokens.append(tok)
 
                 s = self.get_next_state(s, tok)
 
-                print_green(f"next state is: {s}")
+                #print_green(f"next state is: {s}")
                 
                 if s != DEAD_STATE:
                     if self.is_accepted(s):
                         tokens_accept.append(tokens.copy())
-                        print('accept')
+                        #print('accept')
                 
                 else:
-                    print("Dead state")
+                    #print("Dead state")
                     tokens = []
                     input_list.insert(0,tok)
                     
@@ -75,7 +75,7 @@ class DFA:
             input_list = list(input_list)
 
         DEAD_STATE  = 0
-        print_blue("enter simulation")
+        #print_blue("enter simulation")
 
         tokens = []
         tokens_accept = []
@@ -83,12 +83,12 @@ class DFA:
         s = self.init_state
         for i in input_list:
 
-            print_green(f"i is {i}")
+            #print_green(f"i is {i}")
             tokens.append(i)
             print_green(tokens)
 
             s = self.get_next_state(s,i)
-            print_green(f"next state is: {s}")
+            #print_green(f"next state is: {s}")
             if s != DEAD_STATE:
                 if self.is_accepted(s):
                     tokens_accept.append(tokens.copy())
@@ -105,7 +105,7 @@ class DFA:
 
 
 
-                print("Dead state")
+                #print("Dead state")
 
         #print(tokens_accept)
         """ 
@@ -165,7 +165,7 @@ def build_DFA(DFA_dict, init_state):
                 # set for each character
                 for j in ip_dict[i]:
                     # get its follow and update the set
-                    print_green(f"j is {j}")
+                    #print_green(f"j is {j}")
                     print_yellow(f"follow of j{DFA_dict[j][1]}")
                     to_state.update(DFA_dict[j][1])
                     #to_state.update({"*"})
