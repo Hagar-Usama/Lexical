@@ -36,33 +36,33 @@ class RegExp:
                 y = exp[1]
 
 
-                print(x,y)
+                #print(x,y)
                 #print(x in op)
                 #print(y in op)
 
                 
                 if y not in op:
-                    print("y is NOT operator")
+                    #print("y is NOT operator")
                     if (x not in op) or (x == STAR) or (x == PLUS) or (x == QSNMRK) or (x == ")"):
                         exp_list.append(exp.pop(0))
                         exp_list.append("CONCAT")
-                        print("CONCAT")
+                        #print("CONCAT")
                     else:
                         exp_list.append(exp.pop(0))
                         
                 else:
                     # y is operator
-                    print("y is operator")
+                    #print("y is operator")
 
                     if (x == STAR) or (x == PLUS) or (x == QSNMRK):
                         exp_list.append(exp.pop(0))
                         exp_list.append("CONCAT")
-                        print("CONCAT")
+                        #print("CONCAT")
                     
                     elif (x not in op) and y == '(':
                         exp_list.append(exp.pop(0))
                         exp_list.append("CONCAT")
-                        print("CONCAT")
+                        #print("CONCAT")
 
                     else:
                          exp_list.append(exp.pop(0))
@@ -93,71 +93,71 @@ class RegExp:
                 x = exp[0]
                 y = exp[1]
 
-                print(x,y)
+                #print(x,y)
 
                 if (x == STAR) or (x == PLUS) or (x == QSNMRK):
                     if (y == STAR) or (y == PLUS) or (y == QSNMRK) or (y == LBRKT):
-                        print_red("case 1")
+                        #print_red("case 1")
                         exp_list.append(exp.pop(0))
                         exp_list.append("CONCAT")
                         
-                        print(CONCAT)
+                        #print(CONCAT)
                     elif y not in op:
-                        print_red("case 2")
+                        #print_red("case 2")
                         exp_list.append(exp.pop(0))
                         exp_list.append("CONCAT")
 
-                        print(CONCAT)
+                        #print(CONCAT)
                     else:
-                        print_red("case 3")
+                        #print_red("case 3")
                         exp_list.append(exp.pop(0))
                 
                 elif x == OR:
                     if y == LBRKT:
-                        print_red("case 4")
+                        #print_red("case 4")
                         exp_list.append(exp.pop(0))
                         #exp_list.append("CONCAT")
                     elif (y == STAR) or (y == PLUS) or (y == QSNMRK) or (y == OR) or (y == RBRKT):
-                        print_red("case 5")
+                        #print_red("case 5")
                         print("Error!")
                     else:
-                        print_red("case 6")
+                        #print_red("case 6")
                         exp_list.append(exp.pop(0))
 
                 elif x == LBRKT:
                     
                     if (y == STAR) or (y == PLUS) or (y == QSNMRK) or (y == OR):
-                        print_red("case 7")
+                        #print_red("case 7")
                         print("Error!")
 
                     else:
-                        print_red("case 8")
+                        #print_red("case 8")
                         exp_list.append(exp.pop(0))
                 
                 elif x == RBRKT:
                     #if (y == LBRKT) or (y not in op):
                     if (y == LBRKT) or (y not in op):
-                        print_red("case 9")
+                        #print_red("case 9")
 
                         exp_list.append(exp.pop(0))
                         exp_list.append("CONCAT")
 
-                        print(CONCAT)
+                        #print(CONCAT)
                     else:
-                        print_red("case 10")
+                        #print_red("case 10")
                         exp_list.append(exp.pop(0))
 
                 elif x not in op:
                     # x is character
                     if (y == LBRKT) or (y not in op):
-                        print_red("case 11")
+                        #print_red("case 11")
                         exp_list.append(exp.pop(0))
                         exp_list.append("CONCAT")
 
-                        print(CONCAT)
+                        #print(CONCAT)
                         
                     else:
-                        print_red("case 12")
+                        #print_red("case 12")
                         exp_list.append(exp.pop(0))
 
 
@@ -206,7 +206,7 @@ class RegExp:
         operators = self.operators
 
         exp = self.cat_list
-        print(f"catlist = {self.cat_list}")
+        #print(f"catlist = {self.cat_list}")
 
         for i in exp:
             if i == "(":
@@ -226,7 +226,7 @@ class RegExp:
                 while opstack:
                     p_stack = self.get_precedence(opstack[-1])
                     p_current = self.get_precedence(i)
-                    print(f"current: {i},{p_current} , stack {opstack[-1]},{p_stack}")
+                    #print(f"current: {i},{p_current} , stack {opstack[-1]},{p_stack}")
 
                     if p_current >= p_stack:
                         output.append(opstack.pop(-1))
@@ -235,7 +235,7 @@ class RegExp:
                         break
                 
                 opstack.append(i)
-                print(f"opstack : {opstack}")
+                #print(f"opstack : {opstack}")
    
                 
         while opstack:
@@ -303,7 +303,7 @@ def postfix_me(exp_dict, operators):
     post_dict = dict(tuple_list)
     
     #print_blue(tuple_list)
-    print_green(post_dict)
+    #print_green(post_dict)
     return post_dict
     
 

@@ -28,7 +28,7 @@ class DFA:
         
 
         DEAD_STATE  = 0
-        #print_blue("enter simulation")
+        print_blue("enter simulation")
 
         tokens = []
         tokens_accept = []
@@ -42,21 +42,21 @@ class DFA:
         
             while input_list:
                 tok = input_list.pop(0)
-                #print_green(f"token is {tok}")
+                print_green(f"token is {tok}")
 
                 tokens.append(tok)
 
                 s = self.get_next_state(s, tok)
 
-                #print_green(f"next state is: {s}")
+                print_green(f"next state is: {s}")
                 
                 if s != DEAD_STATE:
                     if self.is_accepted(s):
                         tokens_accept.append(tokens.copy())
-                        #print('accept')
+                        print('accept')
                 
                 else:
-                    #print("Dead state")
+                    print("Dead state")
                     tokens = []
                     input_list.insert(0,tok)
                     
@@ -85,7 +85,7 @@ class DFA:
 
             #print_green(f"i is {i}")
             tokens.append(i)
-            print_green(tokens)
+            #print_green(tokens)
 
             s = self.get_next_state(s,i)
             #print_green(f"next state is: {s}")
@@ -93,7 +93,7 @@ class DFA:
                 if self.is_accepted(s):
                     tokens_accept.append(tokens.copy())
                     #tokens = []
-                    print('accept')
+                    #print('accept')
                     #return 'accept'
                
             else:
@@ -132,7 +132,7 @@ class DFA:
 def build_DFA(DFA_dict, init_state):
     
 
-    print_yellow(DFA_dict)
+    #print_yellow(DFA_dict)
     visited = set()
     #istate = frozenset(init_state)
     istate = init_state
@@ -143,20 +143,20 @@ def build_DFA(DFA_dict, init_state):
     dfa_table = collections.defaultdict(dict)
 
     
-    print("*.*"*12)
+    #print("*.*"*12)
     while state_list:
 
-        print(f"state_list: {state_list}")
-        print_green(f"visited: {visited}")        
+        #print(f"state_list: {state_list}")
+        #print_green(f"visited: {visited}")        
         state = state_list.pop(0)
-        print_blue(f"current state is {state}")
+        #print_blue(f"current state is {state}")
         state_trans = set()
         
         visited.add(frozenset(state))
        
         
         ip_dict = dfa_aux(DFA_dict, state)
-        print_purple(f"ip_dict is: {ip_dict}")
+        #print_purple(f"ip_dict is: {ip_dict}")
         # time.sleep(1)
         for i in ip_dict:
             if i != '#':
@@ -166,17 +166,17 @@ def build_DFA(DFA_dict, init_state):
                 for j in ip_dict[i]:
                     # get its follow and update the set
                     #print_green(f"j is {j}")
-                    print_yellow(f"follow of j{DFA_dict[j][1]}")
+                    #print_yellow(f"follow of j{DFA_dict[j][1]}")
                     to_state.update(DFA_dict[j][1])
                     #to_state.update({"*"})
 
                 # check if it is an accept state   
                 if accept_cond in to_state:
-                    print_red(f"it accept {to_state}")
+                    #print_red(f"it accept {to_state}")
                     accept_states.add(frozenset(to_state))
 
                     
-                print(f"DFA[{state}][{i}] = {to_state}")
+                #print(f"DFA[{state}][{i}] = {to_state}")
 
                 dfa_table[frozenset(state)][i] = frozenset(to_state)
 
@@ -185,14 +185,16 @@ def build_DFA(DFA_dict, init_state):
                     state_list.append(to_state)
 
             else:
-                print("#")
+                #print("#")
+                pass
 
-        print("*.*"*12)
+        #print("*.*"*12)
 
-    print(dfa_table)
+    #print(dfa_table)
 
     for key in dfa_table:
-        print_yellow(f"key: {key} ---> value{dfa_table[key]}")
+        #print_yellow(f"key: {key} ---> value{dfa_table[key]}")
+        pass
 
     
     return dfa_table, accept_states

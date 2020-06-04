@@ -14,10 +14,10 @@ def get_current_directory():
 def build_my_tree(exp, operators):
     
     # build RE and concats
-    print_yellow(f"operators: {operators}")
+    #print_yellow(f"operators: {operators}")
     r = RegExp(exp, operators, star="STAR")
     mod_list = r.handle_exp()
-    print_green(mod_list)
+    #print_green(mod_list)
 
         
     ## eval postfix expression for the AST
@@ -27,7 +27,7 @@ def build_my_tree(exp, operators):
     ## I do not add # above to avoid some confusion
     post.append("#")
     post.append("CONCAT")
-    print_yellow(f"postfix exp: {post}")
+    #print_yellow(f"postfix exp: {post}")
 
     ## now build AST
     tree = build_AST_tree(post,operators)
@@ -89,13 +89,20 @@ def get_tokens(machine, input_lists):
 
 def get_tokens_sole(machine, tok):
     ac_tok = []
-
+    token_temp = tok.copy()
     machine.accepted_tokens = []
     machine.simulate_dfa_2(tok,[])
     accepted_tokens = machine.accepted_tokens
     ac_tok = ac_tok + accepted_tokens
 
-    if ac_tok:
+    #print_red(f"toks are: {token_temp}, {ac_tok}")
+    ac_tok2 = [''.join(x) for x in ac_tok]
+    ac_tok2 = ''.join(ac_tok2)
+    token_temp2 = ''.join(token_temp)
+
+    #print_green(f"ac_tok {ac_tok2}, {token_temp2}")
+    if ac_tok2 == token_temp2:
+       
         return True
     else:
         return False
@@ -163,14 +170,14 @@ def main():
 
     ## get postfix_exp of pn_kw
     pn_kw = lex_scan.postfix_keyword_punc()
-    print_red(pn_kw)
+    #print_red(pn_kw)
 
     ## read program file
     lex_scan.read_program_file(program_path)
 
     ## expand rd (subs re in rd)
     lex_scan.expand_rd(3)
-    print_green(lex_scan.expanded_rd)
+    #print_green(lex_scan.expanded_rd)
     
 
     #######################
@@ -187,6 +194,8 @@ def main():
 
     machine = dfa_mine(tree)
     input_lists = lex_scan.program_list.copy()
+
+    print_red(f"input lists: {input_lists}")
     ac_tok = get_tokens(machine, input_lists)
 
 
@@ -195,8 +204,23 @@ def main():
 
     print_red(ac_tok)
 
-    
+    input_2 = ['--','++']
+    #ac_tok = get_tokens(machine, input_2)
+    #print_purple(ac_tok)
+
+    ac_tok = []
+    machine.accepted_tokens = []
+   
+    machine.simulate_dfa_2(input_2,[])
+    accepted_tokens = machine.accepted_tokens
+    ac_tok = ac_tok + accepted_tokens
+    #print_yellow("tok")
+
+    print_purple(ac_tok)
+
+"""     
     exp_rd_rev = reverse_dict(lex_scan.expanded_rd)
+    exp_rd_rev = lex_scan.expanded_rd
     accepted_tokens = ac_tok.copy()
 
     #print_blue(accepted_tokens)
@@ -204,38 +228,7 @@ def main():
     visited_tokens = set()
     detection_table = {}
 
-    """
-    for i in accepted_tokens:
-        for j in lex_scan.keywords:
-            if tuple(i) not in visited_tokens:
-                if tuple(i) == tuple(j):
-                    visited_tokens.append(tuple(i))
-                    detection_table.append((i,tuple(j)))
-
-        for key, val in exp_rd_rev.items():
-            tree1 = build_my_tree(val,operators.copy())
-            tree1.assign_id()
-            eval_tree(tree1)
-            m = dfa_mine(tree1)
-
-            if tuple(i) not in visited_tokens:
-               c =  get_tokens_sole(m, i.copy())
-               if c:
-                   visited_tokens.append(tuple(i))
-                   detection_table.append((key,tuple(i)))
-
-    """
-
-    """  
-    for i in lex_scan.keywords:
-        for j in accepted_tokens:
-            if tuple(j) not in visited_tokens:
-                if tuple(i) == tuple(j):
-                    visited_tokens.add(tuple(j))
-                    #detection_table.append((i, ''.join(j)))
-                    detection_table[''.join(j)] = i
-                    print_green(f"{''.join(j)}, {i}")
-    """
+  
     print_blue(lex_scan.keywords)
     for k in accepted_tokens:
         k_str = ''.join(k)
@@ -245,22 +238,11 @@ def main():
 
     for k in accepted_tokens:
         k_str = ''.join(k)
-        print_purple(f"tok is ")
+        #print_purple(f"tok is {k_str}")
         if k_str in lex_scan.punctuations:
             visited_tokens.add(tuple(k))
             detection_table[k_str] = k_str
 
-    """ 
-    for i in lex_scan.punctuations:
-        for j in accepted_tokens:
-            if tuple(j) not in visited_tokens:
-                if tuple(i) == tuple(j):
-                    visited_tokens.add(tuple(j))
-                    #detection_table.append((i, ''.join(j)))
-                    detection_table[''.join(j)] = i
-                    print_green(f"{''.join(j)}, {i}")
-
-    """
     for key, val in exp_rd_rev.items():
 
         #print_green(val)
@@ -274,32 +256,24 @@ def main():
         acc_tokens = []
         for j in accepted_tokens:
             #print_green(f"j of inpj")
-           print_red(f"j is {j}")
+           #print_red(f"j is {j}")
            if tuple(j) not in visited_tokens:
                c =  get_tokens_sole(m, j.copy())
                if c:
                    visited_tokens.add(tuple(j))
                    #detection_table.append((key, ''.join(j)))
                    detection_table[''.join(j)] = key
-                   print_green(f"{''.join(j)}, {key}")
+                   #print_green(f"{''.join(j)}, {key}")
     
-           #print(f"c is {c}, <{j}>",end='   ')
-           
-    """     if c:
-               print_yellow(f"*.* accepted: {j}, {exp_rd_rev[key]} *.*") 
-    """
-           #print("*")
-
-        
     
-    for key, value in detection_table.items():
-        print_green(f"{key} , {value}")
+    #for key, value in detection_table.items():
+    #    print_green(f"{key} , {value}")
 
     symbol_table = build_ouput_file(accepted_tokens, detection_table)
     print_yellow(symbol_table)
     output_path = cd + '/' + 'output3.txt'
     write_file(output_path, symbol_table)
-
+"""
 
 if __name__ == "__main__":
     main()

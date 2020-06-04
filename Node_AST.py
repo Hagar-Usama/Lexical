@@ -133,14 +133,15 @@ class Node_AST:
     def get_DFA_dict(self):
         DFA_dict = {}
 
-        print(f"in DFA_dict: {self.id_dict}")
+        #print(f"in DFA_dict: {self.id_dict}")
         for i in self.id_dict:
-            print(f"{self.id_dict[i].name , self.id_dict[i].followpos}")
+            #print(f"{self.id_dict[i].name , self.id_dict[i].followpos}")
+            pass
 
         for i in self.id_dict:
             DFA_dict[i] = (self.id_dict[i].name, self.id_dict[i].followpos)
 
-        print(DFA_dict)
+        #print(DFA_dict)
         return DFA_dict
 
     def get_node_dict(self):

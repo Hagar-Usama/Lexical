@@ -193,14 +193,14 @@ def main():
     for j in ac_tok:
         print(''.join(j),end='\t')
 
-    print_yellow("RDs are")
-    print_blue(lx.lex_scan.expanded_rd)
+    #print_yellow("RDs are")
+    #print_blue(lx.lex_scan.expanded_rd)
 
     DFAs = {}
 
     
-    for key, val in lx.lex_scan.expanded_rd.items():
-        print_green(val)
+    #for key, val in lx.lex_scan.expanded_rd.items():
+    #    print_green(val)
         #lex = Lexical()
         #lex.flat_list = val       
         #lex.build_my_tree()
