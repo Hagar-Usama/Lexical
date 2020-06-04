@@ -190,7 +190,7 @@ def main():
     eval_tree(tree)
     
     ## print tree to show
-    tree.print_tree()
+    #tree.print_tree()
 
     machine = dfa_mine(tree)
     input_lists = lex_scan.program_list.copy()
@@ -198,6 +198,7 @@ def main():
     print_red(f"input lists: {input_lists}")
     ac_tok = get_tokens(machine, input_lists)
 
+    """ 
 
     for j in ac_tok:
         print(''.join(j),end='\t')
@@ -217,8 +218,9 @@ def main():
     #print_yellow("tok")
 
     print_purple(ac_tok)
+    """
 
-"""     
+     
     exp_rd_rev = reverse_dict(lex_scan.expanded_rd)
     exp_rd_rev = lex_scan.expanded_rd
     accepted_tokens = ac_tok.copy()
@@ -273,7 +275,7 @@ def main():
     print_yellow(symbol_table)
     output_path = cd + '/' + 'output3.txt'
     write_file(output_path, symbol_table)
-"""
+
 
 if __name__ == "__main__":
     main()

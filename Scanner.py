@@ -13,6 +13,8 @@ class Scanner:
         self.buffer = ""
         self.input_list = []
         self.program_list = []
+        self.operators = {'(', ')', 'STAR', 'OR', 'PLUS','CONCAT'}
+
         
 
     
@@ -21,6 +23,7 @@ class Scanner:
         self.handle_file()
         self.handle_lexical()
         self.list_rules()
+        self.sep_RD()
         
     def handle_file(self):
         self.buffer = self.buffer.replace("\\L", '𝛆')
@@ -48,6 +51,25 @@ class Scanner:
         
     def get_RE_list(self):
         return get_value_list(self.RE)
+
+    def sep_RD(self):
+        for k, v in self.RD.items():
+        #print(k,v)
+            a = v
+            for i in v:
+                
+                if i not in self.RE:
+                    if i not in self.operators:
+                        if len(i) > 1:
+                            #print_yellow(f"non-RE is: {i}")
+                            # separate i, add it to its list, update 
+                        
+                            new_i = list(i)
+                            a = list(chain.from_iterable(new_i if item == i else [item] for item in a))
+                            #print(f"a is {a}")
+                            self.RD[k] = a
+        
+
 
     def expand_rd(self, r):
         
@@ -102,6 +124,7 @@ class Scanner:
             #print_green(f"r= {r}")
             REs[r[0]] = r[1]
             #print_purple(handle_re(i))
+        
 
         #print_purple(pn)
         #print_blue(kw)
@@ -256,6 +279,13 @@ def handle_rd(input_list):
 
     input_list = [i.strip() for i in input_list]
     
+    print_red(f"input list RD: {input_list}")
+
+    ## separating 
+    #for i in input_list:
+    #    if i not in RE:
+    #        print(f"non-RE i is: {i}")
+    
     return input_list
     
 def handle_re(input_list):
@@ -362,10 +392,32 @@ def main():
     lex_scan.expand_rd(3)
     print_green(lex_scan.expanded_rd)
     print(lex_scan.RD)
-    
+
+    print_blue("sep*"*10)
+
+    operators={'(', ')', 'STAR', 'OR', 'PLUS','CONCAT'}
+
+    """ for k, v in lex_scan.RD.items():
+        #print(k,v)
+        a = v
+        for i in v:
+            
+            if i not in lex_scan.RE:
+                if i not in operators:
+                    if len(i) > 1:
+                        print_yellow(f"non-RE is: {i}")
+                        # separate i, add it to its list, update 
+                       
+                        new_i = list(i)
+                        a = list(chain.from_iterable(new_i if item == i else [item] for item in a))
+                        #print(f"a is {a}")
+                        lex_scan.RD[k] = a
+    """
 
 
-   
+    print(lex_scan.RD)
+    for k,v in lex_scan.RD.items():
+        print(k,v)
 
 
 
