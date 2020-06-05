@@ -270,7 +270,7 @@ def main():
     
     print_blue(list_to_str(accepted_tokens))
     lexeme_path = cd + '/' + 'lexemes.txt'
-    write_file(lexeme_path, symbol_table)
+    write_file(lexeme_path, list_to_str(accepted_tokens))
 
 
 
