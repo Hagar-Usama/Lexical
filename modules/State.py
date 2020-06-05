@@ -1,5 +1,5 @@
 import collections
-from color_print import print_blue, print_green, print_purple, print_red, print_yellow
+from modules.color_print import print_blue, print_green, print_purple, print_red, print_yellow
 import time
 
 class State:

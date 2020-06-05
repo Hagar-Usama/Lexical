@@ -1,12 +1,13 @@
 import os
-from RegExp import RegExp, postfix_me
-from Node_AST import build_AST_tree, eval_followpos, get_node_dict, pre_followpos
-from State import DFA, build_DFA
+from modules.RegExp import RegExp, postfix_me
+from modules.Node_AST import build_AST_tree, eval_followpos, get_node_dict, pre_followpos
+from modules.State import DFA, build_DFA
 
 
 def get_current_directory(): 
-    current_path = os.path.dirname(os.path.abspath(__file__))
-    return current_path
+    #current_path = os.path.dirname(os.path.abspath(__file__))
+    path = os.getcwd() 
+    return path
     
 def write_file(path_file, output_list):
 

@@ -1,10 +1,10 @@
-from Scanner import Scanner, flatten_list, intersperse
-from color_print import print_blue, print_green, print_purple, print_red, print_yellow, ANSI_RED, ANSI_RESET
-from RegExp import RegExp, postfix_me
-from Node_AST import build_AST_tree, eval_followpos, get_node_dict, pre_followpos
-from State import DFA, build_DFA
-from lexical_aux import build_my_tree, build_ouput_file, dfa_mine, eval_tree, get_current_directory
-from lexical_aux import get_tokens_sole, reverse_dict, write_file, list_to_str
+from modules.Scanner import Scanner, flatten_list, intersperse
+from modules.color_print import print_blue, print_green, print_purple, print_red, print_yellow, ANSI_RED, ANSI_RESET
+from modules.RegExp import RegExp, postfix_me
+from modules.Node_AST import build_AST_tree, eval_followpos, get_node_dict, pre_followpos
+from modules.State import DFA, build_DFA
+from modules.lexical_aux import build_my_tree, build_ouput_file, dfa_mine, eval_tree, get_current_directory
+from modules.lexical_aux import get_tokens_sole, reverse_dict, write_file, list_to_str
 
 
 class Lexical:

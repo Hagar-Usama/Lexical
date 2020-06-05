@@ -4,9 +4,12 @@ ANSI_GREEN = "\u001B[32m"
 ANSI_YELLOW = "\u001B[33m"
 ANSI_BLUE = "\u001B[34m"
 ANSI_PURPLE = "\u001B[35m"
-#ANSI_YELLOW = "\u001B[36m"
+ANSI_DARK_CYAN = "\033[96m"
 
 
+
+def print_dark_cyan(msg):
+    print(f"{ANSI_DARK_CYAN}{msg}{ANSI_RESET}")
 
 def print_yellow(msg):
     print(f"{ANSI_YELLOW}{msg}{ANSI_RESET}")
