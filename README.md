@@ -20,7 +20,11 @@ I have explored different references so far. Thus, I would say I have a complete
 * (24-29)/5: * build the program (see todo)
 
 ---
+### Message
+It is the third time I implement this phase. I failed two times and finally
+managed to implement it successfully.
 
+I am proud of my original work. It is not the best. Yet, it is mine. And that is enough for me 😌
 ### Tasks
 
  ####  you can do it 💪 👐 ( yup I did it)
@@ -53,7 +57,8 @@ I have explored different references so far. Thus, I would say I have a complete
 * [x] replace state names with smaller unique names
 * [ ] add arguments (args)
 * [ ] add DFA table to Lexical (from lexical_aux)
-* [ ] report
+* [ ] add Lexical to modules and run from main
+* [x] report
 
 ---
 
