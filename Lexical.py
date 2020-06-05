@@ -1,10 +1,12 @@
 from modules.Scanner import Scanner, flatten_list, intersperse
-from modules.color_print import print_blue, print_green, print_purple, print_red, print_yellow, ANSI_RED, ANSI_RESET
+from modules.color_print import print_blue, print_green, print_purple, print_red, print_yellow, print_dark_cyan
+from modules.color_print import ANSI_RED, ANSI_RESET
 from modules.RegExp import RegExp, postfix_me
 from modules.Node_AST import build_AST_tree, eval_followpos, get_node_dict, pre_followpos
 from modules.State import DFA, build_DFA
 from modules.lexical_aux import build_my_tree, build_ouput_file, dfa_mine, eval_tree, get_current_directory
 from modules.lexical_aux import get_tokens_sole, reverse_dict, write_file, list_to_str
+from itertools import chain
 
 
 class Lexical:
@@ -38,9 +40,35 @@ class Lexical:
         ## or punctuations
         pn_exp = intersperse(lex_scan.punctuations,"OR")
 
+        ## ored key-pn:
+        kw_pn = lex_scan.keywords.union(lex_scan.punctuations)
+        #print_blue(kw_pn)
+        kw_pn = intersperse(kw_pn,"OR")
+        #print_dark_cyan(kw_pn)
+
+        #######################
+        ## get_new_kn_pn
+        #######################
+        new_kw_pn = list(chain.from_iterable(["lbracket"] if item == '('  else [item] for item in kw_pn))
+        new_kw_pn = list(chain.from_iterable(["rbracket"] if item == ')'  else [item] for item in new_kw_pn))
+        new_op = {"lbracket", "rbracket", "OR"}
+        new_kw_pn = list(chain.from_iterable(list(item) if item not in new_op  else [item] for item in new_kw_pn))
+
+        kp_r = RegExp(new_kw_pn, {"OR"})
+        kp_r.handle_exp()
+
+        # postfix keyword-punctuations to add 
+        kp_post = kp_r.get_postfix()
+        ## now replace lbracket and rbracket with ( and )
+        kp_post = list(chain.from_iterable(['('] if item == 'lbracket' else [item] for item in kp_post))
+        kp_post = list(chain.from_iterable([')'] if item == 'rbracket' else [item] for item in kp_post))
+        
+        self.kp_post = kp_post
+
+
         ## get postfix_exp of pn_kw
-        pn_kw = lex_scan.postfix_keyword_punc()
-        #print_red(pn_kw)
+        #pn_kw = lex_scan.postfix_keyword_punc()
+        
 
         ## read program file
         lex_scan.read_program_file(program_path)
@@ -95,7 +123,8 @@ class Lexical:
             tree.attach_node(term, exp)
 
         ## add keywords and punctuations
-        tree.implant_node(tree, pn_kw)
+        #tree.implant_node(tree, pn_kw)
+        tree.implant_node(tree, self.kp_post)
 
         ## assign ids
         tree.assign_id()
@@ -186,6 +215,7 @@ def main():
 
     print(len(dfa_tab))
     print("*"*20)
+    
     ######################
     ## build symbol table
     ######################
@@ -241,6 +271,14 @@ def main():
     print_blue(list_to_str(accepted_tokens))
     lexeme_path = cd + '/' + 'lexemes.txt'
     write_file(lexeme_path, symbol_table)
+
+
+    print(len(dfa_tab))
+    print("*"*20)
+    
+    for k,v in dfa_tab.items():
+        print_yellow(k)
+        print_blue(v)
 
 
 

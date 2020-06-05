@@ -138,7 +138,9 @@ class Scanner:
 
     def postfix_keyword_punc(self):
 
+        #kw_pn = self.keywords.union(self.punctuations)
         kw_pn = self.keywords.union(self.punctuations)
+
         kw_pn = intersperse(list(kw_pn) ,"OR")
         kw_pn.remove("OR")
         kw_pn.append("OR")
