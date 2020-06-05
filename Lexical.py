@@ -5,7 +5,7 @@ from modules.RegExp import RegExp, postfix_me
 from modules.Node_AST import build_AST_tree, eval_followpos, get_node_dict, pre_followpos
 from modules.State import DFA, build_DFA
 from modules.lexical_aux import build_my_tree, build_ouput_file, dfa_mine, eval_tree, get_current_directory
-from modules.lexical_aux import get_tokens_sole, reverse_dict, write_file, list_to_str
+from modules.lexical_aux import get_start_accept, get_table_dict, get_tokens_sole, list_to_str, print_dfa_trans, reverse_dict, write_file
 from itertools import chain
 
 
@@ -152,10 +152,13 @@ class Lexical:
         ## prepare for building the DFA
         ## the firstpos of root is the first state in the DFA
         root_s = tree.firstpos
+        self.start_state = root_s
         #print_blue(f"first of root:{root_s}")
         
         ## now, let's build our DFA
         dfa_table, accept_states = build_DFA(DFA_dict, root_s)
+        self.accept_states = accept_states
+        #print(f"root_s {root_s}, accept_states {accept_states}")
 
         
         ## create your DFA machine
@@ -191,20 +194,20 @@ class Lexical:
 
 
 
-
 def main():
 
     ## get directory for lexical and program
     cd = get_current_directory()
-    lex_file = 'lexical1.txt'
+    lex_file = 'lexical3.txt'
     lex_path = cd + '/' +  lex_file
-    program_path = cd + '/' + 'program1.txt'
+    program_path = cd + '/' + 'program3.txt'
 
     ## build full dfa
     lx = Lexical()
     lx.lex_path = lex_path
     lx.program_path = program_path
     lx.run_scan()
+    
     
     ac_tok = lx.dfa_stuff()
 
@@ -276,9 +279,9 @@ def main():
     print(len(dfa_tab))
     print("*"*20)
     
-    for k,v in dfa_tab.items():
-        print_yellow(k)
-        print_blue(v)
+    #for k,v in dfa_tab.items():
+    #    print_yellow(k)
+    #    print_blue(v)
 
 
 
@@ -288,7 +291,14 @@ def main():
     #    for i in v:
     #        print(i,v[i])
 
+    table_dict = get_table_dict(frozenset(dfa_tab))
+    #print_dark_cyan(table_dict)
 
+    print_dfa_trans(dfa_tab, table_dict)
+    start, accept = get_start_accept(frozenset(lx.start_state), lx.accept_states, table_dict)
+    print_yellow(f"Start State: {start}")
+    print_yellow(f"Accept States: {accept}")
+    
     
 
 

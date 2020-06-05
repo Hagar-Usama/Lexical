@@ -45,11 +45,12 @@ I have explored different references so far. Thus, I would say I have a complete
 * [x] make sub DFAs for each RD
 * [x] subs REs in RDs
 * [x] sep REs
-* [ ] sep keywords    (not really)
-* [ ] sep punctuation (not really)
-* [ ] tabulate DFA table
+* [x] sep keywords    (not really)
+* [x] sep punctuation (not really)
+* [x] tabulate DFA table
 * [x] test the case by diffmerge tool
-* [ ] consider module file to add your modules in
+* [x] consider module file to add your modules in
+* [x] replace state names with smaller unique names
 
 * [ ] report
 

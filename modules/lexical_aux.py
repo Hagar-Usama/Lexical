@@ -2,6 +2,7 @@ import os
 from modules.RegExp import RegExp, postfix_me
 from modules.Node_AST import build_AST_tree, eval_followpos, get_node_dict, pre_followpos
 from modules.State import DFA, build_DFA
+from modules.color_print import print_yellow
 
 
 def get_current_directory(): 
@@ -135,4 +136,64 @@ def list_to_str(the_list):
         new_list.append(''.join(i))
 
     return new_list
+
+######################################
+## consider adding to Lexical Class ##
+######################################
+
+def get_table_dict(dfa_tab):
+    """
+    takes dfa table and returns dict of unique names for states
+    """
+    identifier = 0
+    table_dict = {}
+
+    for i in dfa_tab:
+        table_dict[i] = 's' + str(identifier)
+        identifier +=1
+
+    return table_dict
+
+def print_dfa_trans(dfa_tab, table_dict):
+
+    for k,v in dfa_tab.items():
+        #print_yellow(table_dict[k])
+        d = table_dict.get(k)
+        if d:
+            #print_yellow(f"\n{d}")
+            pass
+        else:
+            #print_yellow('\ns' + str(len(dfa_tab)))
+            d = 's' + str(len(dfa_tab))
+
+        print_yellow(f"\n{d}")
+
+        for key, value in v.items():
+            #print(key, end="->")
+            #print_blue(table_dict.get(value))
+            d = table_dict.get(value)
+            if d:
+                #print(d + " | ", end ="\t")
+                pass
+            else:
+                #print('s' + str(len(dfa_tab)) +  " | " , end ="\t")
+                d = 's' + str(len(dfa_tab))
+            t = (key, d)
+
+            print(t,end = '\t')
+
+    print("")
+
+def get_start_accept(start_state, accept_states, table_dict):
+    """ returns start and accept states with unique names """
+    s = table_dict.get(start_state)
+    accept = set()
+
+    for i in accept_states:
+        a = table_dict.get(i)
+        #print_blue(a)
+        if a:
+            accept.add(a)
+    return s, accept
+
     

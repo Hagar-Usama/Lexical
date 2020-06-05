@@ -235,7 +235,7 @@ def generate_equivalent_range(str_input):
         range_e = 'z'
         y = range_s
 
-        for j in range(ord(range_s)+1, ord(range_e)+1):
+        for j in range(ord(range_s)+1, ord(range_e)+2):
             y += " OR " + chr(j) 
             
     elif str_input == "A-Z":
@@ -244,7 +244,7 @@ def generate_equivalent_range(str_input):
         range_e = 'Z'
         y = range_s
 
-        for j in range(ord(range_s)+1, ord(range_e)+1):
+        for j in range(ord(range_s)+1, ord(range_e)+2):
             y += " OR " + chr(j) 
 
     elif str_input == "0-9":
@@ -253,7 +253,7 @@ def generate_equivalent_range(str_input):
         range_e = '9'
         y = range_s
 
-        for j in range(ord(range_s)+1, ord(range_e)+1):
+        for j in range(ord(range_s)+1, ord(range_e)+2):
             y += " OR " + chr(j) 
 
     return y
