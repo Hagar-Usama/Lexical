@@ -51,7 +51,8 @@ I have explored different references so far. Thus, I would say I have a complete
 * [x] test the case by diffmerge tool
 * [x] consider module file to add your modules in
 * [x] replace state names with smaller unique names
-
+* [ ] add arguments (args)
+* [ ] add DFA table to Lexical (from lexical_aux)
 * [ ] report
 
 ---

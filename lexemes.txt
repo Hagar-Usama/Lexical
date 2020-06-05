@@ -6,9 +6,8 @@ id
 integer
 begin
 id
-incop
-id
-decop
+assign
+num
 while
 id
 relop
@@ -30,7 +29,7 @@ id
 assign
 id
 addop
-floatNum
+num
 else
 id
 assign

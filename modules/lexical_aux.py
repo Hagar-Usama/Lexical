@@ -62,7 +62,7 @@ def expand_my_tree(tree, REs, pn_kw, operators):
     tree.assign_id()
 
 def eval_tree(tree):
-    ## get firstpos and lastpos and nullables (+, ? not yet)
+    ## get firstpos and lastpos and nullables
     pre_followpos(tree)
     
     ## store in root the ids for leaves
