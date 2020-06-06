@@ -1,15 +1,41 @@
 from modules.lexical_aux import build_my_tree, build_ouput_file, dfa_mine, eval_tree, get_current_directory, get_start_accept, get_table_dict, get_tokens_sole, list_to_str, print_dfa_trans, reverse_dict, write_file
 from modules.Lexical import Lexical
 from modules.color_print import print_blue, print_yellow
+import sys
+
+def get_arg(param_index, default=None):
+    """
+        Gets a command line argument by index (note: index starts from 1)
+        If the argument is not supplies, it tries to use a default value.
+
+        If a default value isn't supplied, an error message is printed
+        and terminates the program.
+    """
+    try:
+        return sys.argv[param_index]
+    except IndexError as e:
+        if default:
+            return default
+        else:
+            print(e)
+            print(
+                f"[FATAL] The comand-line argument #[{param_index}] is missing")
+            exit(-1)    # Program execution failed.
+
+
 
 
 def main():
 
+    ## set default file for args
+    lexical_file = get_arg(1, "lexical.txt")
+    program_file = get_arg(2, "program.txt")
+
     ## get directory for lexical and program
     cd = get_current_directory()
-    lex_file = 'lexical1.txt'
+    lex_file = lexical_file
     lex_path = cd + '/' +  lex_file
-    program_path = cd + '/' + 'program1.txt'
+    program_path = cd + '/' + program_file
 
     ## build full dfa
     lx = Lexical()

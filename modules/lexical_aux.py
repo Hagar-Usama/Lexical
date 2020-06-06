@@ -196,4 +196,26 @@ def get_start_accept(start_state, accept_states, table_dict):
             accept.add(a)
     return s, accept
 
-    
+
+def get_arg(param_index, default=None):
+    """
+        Gets a command line argument by index (note: index starts from 1)
+        If the argument is not supplies, it tries to use a default value.
+
+        If a default value isn't supplied, an error message is printed
+        and terminates the program.
+    """
+    try:
+        return sys.argv[param_index]
+    except IndexError as e:
+        if default:
+            return default
+        else:
+            print(e)
+            print(
+                f"[FATAL] The comand-line argument #[{param_index}] is missing")
+            exit(-1)    # Program execution failed.
+
+
+
+

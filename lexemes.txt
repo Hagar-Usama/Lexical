@@ -8,6 +8,12 @@ begin
 pass
 :=
 0
+count
+:=
+0.343
+sum
+:=
+3403
 while
 pass
 <>
