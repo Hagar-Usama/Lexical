@@ -89,7 +89,13 @@ def main():
     print("*.*. Stream of Tokens .*.*")
     print_yellow(symbol_table)
     output_path = cd + '/' + 'tokens.txt'
-    write_file(output_path, symbol_table)
+    quote_tokens = []
+
+    for i in symbol_table:
+        quote_tokens.append("'" + str(i) + "'")
+
+
+    write_file(output_path, quote_tokens)
 
     
     table_dict = get_table_dict(frozenset(dfa_tab))
