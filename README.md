@@ -56,7 +56,7 @@ I am proud of my original work. It is not the best. Yet, it is mine. And that is
 * [x] consider module file to add your modules in
 * [x] replace state names with smaller unique names
 * [x] add arguments (argparse)
-* [ ] consider add directory for input and directory for output
+* [x] consider add directory for input and directory for output
 * [ ] add DFA table to Lexical (from lexical_aux)
 * [ ] add Lexical to modules and run from main
 * [x] report

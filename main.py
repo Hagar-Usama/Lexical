@@ -34,8 +34,8 @@ def main():
     ## get directory for lexical and program
     cd = get_current_directory()
     lex_file = lexical_file
-    lex_path = cd + '/' +  lex_file
-    program_path = cd + '/' + program_file
+    lex_path = cd + '/' + 'inputs' +'/' +  lex_file
+    program_path = cd + '/' + 'inputs' +'/' + program_file
 
     ## build full dfa
     lx = Lexical()
@@ -104,7 +104,7 @@ def main():
     print("")
     
     print_blue(list_to_str(accepted_tokens))
-    lexeme_path = cd + '/' + 'lexemes.txt'
+    lexeme_path = cd + '/' + 'outputs'+ '/' + 'lexemes.txt'
     write_file(lexeme_path, list_to_str(accepted_tokens))
 
 
@@ -114,7 +114,7 @@ def main():
 
     print("*.*. Stream of Tokens .*.*")
     print_yellow(symbol_table)
-    output_path = cd + '/' + 'tokens.txt'
+    output_path = cd + '/' + 'outputs' + '/' + 'tokens.txt'
     quote_tokens = []
 
     for i in symbol_table:
