@@ -28,14 +28,14 @@ def get_arg(param_index, default=None):
 def main():
 
     ## set default file for args
-    lexical_file = get_arg(1, "lexical.txt")
-    program_file = get_arg(2, "program.txt")
+    lexical_file = get_arg(1, "/inputs/lexical.txt")
+    program_file = get_arg(2, "/inputs/program.txt")
 
     ## get directory for lexical and program
     cd = get_current_directory()
     lex_file = lexical_file
-    lex_path = cd + '/' + 'inputs' +'/' +  lex_file
-    program_path = cd + '/' + 'inputs' +'/' + program_file
+    lex_path = cd + '/' +  lex_file
+    program_path = cd + '/' + program_file
 
     ## build full dfa
     lx = Lexical()
