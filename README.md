@@ -55,7 +55,8 @@ I am proud of my original work. It is not the best. Yet, it is mine. And that is
 * [x] test the case by diffmerge tool
 * [x] consider module file to add your modules in
 * [x] replace state names with smaller unique names
-* [ ] add arguments (argparse)
+* [x] add arguments (argparse)
+* [ ] consider add directory for input and directory for output
 * [ ] add DFA table to Lexical (from lexical_aux)
 * [ ] add Lexical to modules and run from main
 * [x] report
