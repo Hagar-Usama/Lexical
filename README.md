@@ -3,31 +3,19 @@
 
 # Lexical Analyzer
 
-This is my third time to implement this phase. Hopefully, it is the last time ISA.
-I have explored different references so far. Thus, I would say I have a complete perspective for this project.
+[![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com)
+[![forthebadge](https://forthebadge.com/images/badges/made-with-python.svg)](https://forthebadge.com)
+[![forthebadge](https://forthebadge.com/images/badges/open-source.svg)](https://forthebadge.com)
+
+
+Lexical Analyzer is the first phase of my compiler (Genepiler). It's planned to join my _'Oh My Compiler'_ project!
+
+This phase converts the source code (based on the lexical file) into tokens, to be processed later in the second phase - [parser-generator](https://github.com/Hagar-Usama/parser-generator)
 
 ---
 
-## Plan (schedule)
-* Today: 23 May
-* Actual Deadline: 6 Jun
-* Phase Deadline: 29 May
+## Tasks
 
----
-
-### Schedule:
-* 23/5:  Getting to know what's going on
-* (24-29)/5: * build the program (see todo)
-
----
-### Message
-It is the third time I implement this phase. I failed two times and finally
-managed to implement it successfully.
-
-I am proud of my original work. It is not the best. Yet, it is mine. And that is enough for me 😌
-### Tasks
-
- ####  you can do it 💪 👐 ( yup I did it)
 * [x] input to RD
 * [x] add concat to RD (needs improvement)[done]
 * [x] RD to prefix
@@ -52,20 +40,34 @@ I am proud of my original work. It is not the best. Yet, it is mine. And that is
 * [x] sep keywords    (not really)
 * [x] sep punctuation (not really)
 * [x] tabulate DFA table
-* [x] test the case by diffmerge tool
+* [x] test the given test cases by diffmerge tool
 * [x] consider module file to add your modules in
 * [x] replace state names with smaller unique names
 * [x] add arguments (argparse)
-* [x] consider add directory for input and directory for output
+* [x] consider adding directory for input and directory for output
 * [ ] add DFA table to Lexical (from lexical_aux)
 * [ ] add Lexical to modules and run from main
 * [x] report
 
+### New Tasks:
+* [ ] Enhance the lexical file format
+
 ---
 
-### Notes:
+## Notes (related to the internal structure):
 * rd to be entered without '#'
 * add '#' . directly to post-fix expression to avoid confusion
 * dfa_simulate_2 is recursive it returns output in reverse order
 * as you replace 'e' with its symbol, replace '(' with LBRKT and ')' RBRKT
 and mind that in postfix
+
+---
+
+## [Memory] Plan (schedule) 
+* Today: 23 May 2020
+* Actual Deadline: 6 Jun 2020
+* Phase Deadline: 29 May 2020
+  
+  ### Schedule:
+* 23/5:  Getting to know what's going on
+* (24-29)/5: Building the program (see todo)
