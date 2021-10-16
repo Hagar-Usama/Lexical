@@ -70,4 +70,4 @@ and mind that in postfix
   
   ### Schedule:
 * 23/5:  Getting to know what's going on
-* (24-29)/5: Build the program (see todo)
+* (24-29)/5: Building the program (see todo)
