@@ -14,17 +14,6 @@ This phase converts the source code (based on the lexical file) into tokens, to 
 
 ---
 
-## [Memory] Plan (schedule) 
-* Today: 23 May 2020
-* Actual Deadline: 6 Jun 2020
-* Phase Deadline: 29 May 2020
-  
-  ### Schedule:
-* 23/5:  Getting to know what's going on
-* (24-29)/5: Build the program (see todo)
-
----
-
 ## Tasks
 
 * [x] input to RD
@@ -65,9 +54,22 @@ This phase converts the source code (based on the lexical file) into tokens, to 
 
 ---
 
-## Notes (related to internal structure):
+## Notes (related to the internal structure):
 * rd to be entered without '#'
 * add '#' . directly to post-fix expression to avoid confusion
 * dfa_simulate_2 is recursive it returns output in reverse order
 * as you replace 'e' with its symbol, replace '(' with LBRKT and ')' RBRKT
 and mind that in postfix
+
+---
+
+## [Memory] Plan (schedule) 
+* Today: 23 May 2020
+* Actual Deadline: 6 Jun 2020
+* Phase Deadline: 29 May 2020
+  
+  ### Schedule:
+* 23/5:  Getting to know what's going on
+* (24-29)/5: Build the program (see todo)
+
+---
