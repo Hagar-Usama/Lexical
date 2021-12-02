@@ -13,6 +13,10 @@ Lexical Analyzer is the first phase of my compiler (Genepiler). It's planned to 
 This phase converts the source code (based on the lexical file) into tokens, to be processed later in the second phase - [parser-generator](https://github.com/Hagar-Usama/parser-generator)
 
 ---
+## See the next phases 👇
+* [Parser Generator](https://github.com/Hagar-Usama/parser-generator)
+* [Intermediate Code Generator](https://github.com/Hagar-Usama/Intermediate-Code-Generator)
+---
 
 ## Tasks
 
