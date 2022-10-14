@@ -7,6 +7,8 @@
 [![forthebadge](https://forthebadge.com/images/badges/made-with-python.svg)](https://forthebadge.com)
 [![forthebadge](https://forthebadge.com/images/badges/open-source.svg)](https://forthebadge.com)
 
+![hacktoberfest](https://img.shields.io/github/hacktoberfest/2022/badges/shields?label=hacktoberfest%202022)
+
 
 Lexical Analyzer is the first phase of my compiler (Genepiler). It's planned to join my _'Oh My Compiler'_ project!
 
