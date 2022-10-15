@@ -1,5 +1,5 @@
 import re
-from modules.color_print import print_blue, print_green, print_purple, print_red, print_yellow, ANSI_RED, ANSI_RESET
+from helpers.color_print import print_blue, print_green, print_purple, print_red, print_yellow, ANSI_RED, ANSI_RESET
 from itertools import chain
 from copy import copy, deepcopy
 

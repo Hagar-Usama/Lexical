@@ -1,9 +1,9 @@
-from modules.Scanner import Scanner, flatten_list, intersperse
-from modules.color_print import print_blue, print_green, print_purple, print_red, print_yellow, print_dark_cyan
-from modules.color_print import ANSI_RED, ANSI_RESET
-from modules.RegExp import RegExp, postfix_me
-from modules.Node_AST import build_AST_tree, eval_followpos, get_node_dict, pre_followpos
-from modules.State import DFA, build_DFA
+from helpers.Scanner import Scanner, flatten_list, intersperse
+from helpers.color_print import print_blue, print_green, print_purple, print_red, print_yellow, print_dark_cyan
+from helpers.color_print import ANSI_RED, ANSI_RESET
+from helpers.RegExp import RegExp, postfix_me
+from helpers.Node_AST import build_AST_tree, eval_followpos, get_node_dict, pre_followpos
+from helpers.State import DFA, build_DFA
 from modules.lexical_aux import build_my_tree, build_ouput_file, dfa_mine, eval_tree, get_current_directory
 from modules.lexical_aux import get_start_accept, get_table_dict, get_tokens_sole, list_to_str, print_dfa_trans, reverse_dict, write_file
 from itertools import chain
@@ -300,5 +300,5 @@ def main():
 
 
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()

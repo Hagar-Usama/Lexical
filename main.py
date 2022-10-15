@@ -1,6 +1,6 @@
 from modules.lexical_aux import build_my_tree, build_ouput_file, dfa_mine, eval_tree, get_current_directory, get_start_accept, get_table_dict, get_tokens_sole, list_to_str, print_dfa_trans, reverse_dict, write_file
 from modules.Lexical import Lexical
-from modules.color_print import print_blue, print_yellow
+from helpers.color_print import print_blue, print_yellow
 import sys
 
 def get_arg(param_index, default=None):

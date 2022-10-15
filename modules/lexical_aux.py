@@ -1,8 +1,8 @@
 import os
-from modules.RegExp import RegExp, postfix_me
-from modules.Node_AST import build_AST_tree, eval_followpos, get_node_dict, pre_followpos
-from modules.State import DFA, build_DFA
-from modules.color_print import print_yellow
+from helpers.RegExp import RegExp, postfix_me
+from helpers.Node_AST import build_AST_tree, eval_followpos, get_node_dict, pre_followpos
+from helpers.State import DFA, build_DFA
+from helpers.color_print import print_yellow
 
 
 def get_current_directory(): 
